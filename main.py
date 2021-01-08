@@ -4,16 +4,12 @@ import json
 config_file = open('./config.json')
 config = json.load(config_file)
 
-#sender_email = config['sender']['username']
-#receiver_email = config['recipient']['username']
-
 message = """\
 Subject: Hi there
 
 This message was sent from a Python script."""
 
 port = 465 # SSL
-
 context = ssl.create_default_context() # Create a secure SSL context
 
 with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
