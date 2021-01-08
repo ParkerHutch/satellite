@@ -1,17 +1,23 @@
 import smtplib, ssl
 import json
 
-account_info_file = open('./accountinfo.json')
-account_info = json.load(account_info_file)
+config_file = open('./config.json')
+config = json.load(config_file)
 
+#sender_email = config['sender']['username']
+#receiver_email = config['recipient']['username']
+
+message = """\
+Subject: Hi there
+
+This message was sent from a Python script."""
 
 port = 465 # SSL
 
-# Create a secure SSL context
-context = ssl.create_default_context()
+context = ssl.create_default_context() # Create a secure SSL context
 
 with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
-    server.login(account_info['username'], account_info['password'])
-    # TODO: Send email here
-
-print("Hello, World!")
+    server.login(config['sender']['username'], config['sender']['password'])
+    server.sendmail(
+        config['sender']['username'], config['recipient']['username'], message)
+    print('Attempted to send email')

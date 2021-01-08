@@ -1,0 +1,9 @@
+{
+    "sender": {
+        "username":"sender@email.com",
+        "password":"password"
+    },
+    "recipient": {
+        "username":"recipient@email.com"
+    }
+}
