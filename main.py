@@ -14,35 +14,26 @@ message["Subject"] = "multipart test"
 message["From"] = config['sender']['username']
 message["To"] = config['recipient']['username']
 
-# Create the plain-text and HTML version of your message
-text = """\
-Python script message
+"""
+    Create the HTML part of the message
 """
 html = open('message.html', 'r').read()
 
-# Turn these into plain/html MIMEText objects
-part1 = MIMEText(text, "plain")
-part2 = MIMEText(html, "html")
+html_obj = MIMEText(html, "html")
 
-# Add HTML/plain-text parts to MIMEMultipart message
-# The email client will try to render the last part first
-message.attach(part1)
-message.attach(part2)
+message.attach(html_obj)
 
-context = ssl.create_default_context() # Create a secure SSL context
-
-
+"""
+    Create the attachment part of the message
+"""
 filename = "attachment.jpg"  # In same directory as script
 
-# Open PDF file in binary mode
+# Open the attachment in binary reading mode
 with open(filename, "rb") as attachment:
-    # Add file as application/octet-stream
-    # Email client can usually download this automatically as attachment
     part = MIMEBase("application", "octet-stream")
     part.set_payload(attachment.read())
 
-# Encode file in ASCII characters to send by email    
-encoders.encode_base64(part)
+encoders.encode_base64(part) # Encode file in ASCII characters to send by email
 
 # Add header as key/value pair to attachment part
 part.add_header(
@@ -52,6 +43,7 @@ part.add_header(
 
 message.attach(part) # attach attachment
 
+context = ssl.create_default_context() # Create a secure SSL context
 with smtplib.SMTP_SSL(
     config['sender']['server'], config['sender']['port'], context=context
 ) as server:
