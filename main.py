@@ -1,7 +1,7 @@
 import smtplib, ssl
 import json
 
-f = open('./userinfo.json')
+f = open('./accountinfo.json')
 data = json.load(f)
 print(data['username'])
 
