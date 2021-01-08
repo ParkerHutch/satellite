@@ -50,7 +50,14 @@ context = ssl.create_default_context() # Create a secure SSL context
 with smtplib.SMTP_SSL(
     config['sender']['server'], config['sender']['port'], context=context
 ) as server:
-    server.login(config['sender']['username'], config['sender']['password'])
-    server.sendmail(
-        config['sender']['username'], config['recipient']['username'], message.as_string())
-    print('Attempted to send email')
+    try:
+        server.login(config['sender']['username'], config['sender']['password'])
+    except:
+        print("Could not log into the email server. Please check \
+            that the 'sender' values are correct in config.json.")
+    try:
+        server.sendmail(
+            config['sender']['username'], config['recipient']['username'], message.as_string())
+        print("Sent the email")
+    except:
+        print("An error occurred while sending the email.")
