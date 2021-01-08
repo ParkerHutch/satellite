@@ -1,9 +1,10 @@
 {
     "sender": {
-        "username":"sender@email.com",
-        "password":"password"
+        "username": "sender@email.com",
+        "password": "password",
+        "port": 123
     },
     "recipient": {
-        "username":"recipient@email.com"
+        "username": "recipient@email.com"
     }
 }
