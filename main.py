@@ -15,17 +15,7 @@ message["To"] = config['recipient']['username']
 text = """\
 Python script message
 """
-html = """\
-<html>
-  <body>
-    <p>Hello from a Python Script!<br>
-       This is a second line<br>
-       <a href="http://www.google.com">Hyperlink</a>
-       some plain text
-    </p>
-  </body>
-</html>
-"""
+html = open('message.html', 'r').read()
 
 # Turn these into plain/html MIMEText objects
 part1 = MIMEText(text, "plain")
@@ -37,6 +27,7 @@ message.attach(part1)
 message.attach(part2)
 
 context = ssl.create_default_context() # Create a secure SSL context
+
 
 with smtplib.SMTP_SSL(
     config['sender']['server'], config['sender']['port'], context=context
