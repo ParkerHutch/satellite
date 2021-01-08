@@ -2,6 +2,7 @@
     "sender": {
         "username": "sender@email.com",
         "password": "password",
+        "server": "smtp.email.com",
         "port": 123
     },
     "recipient": {
