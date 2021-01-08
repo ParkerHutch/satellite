@@ -9,7 +9,6 @@ Subject: Hi there
 
 This message was sent from a Python script."""
 
-port = 465 # SSL
 context = ssl.create_default_context() # Create a secure SSL context
 
 with smtplib.SMTP_SSL(
