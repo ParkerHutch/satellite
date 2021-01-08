@@ -10,7 +10,7 @@ config_file = open('./config.json')
 config = json.load(config_file)
 
 message = MIMEMultipart("alternative")
-message["Subject"] = "multipart test"
+message["Subject"] = "Email from Python"
 message["From"] = config['sender']['username']
 message["To"] = config['recipient']['username']
 
@@ -43,6 +43,9 @@ part.add_header(
 
 message.attach(part) # attach attachment
 
+""" 
+    Send the email
+"""
 context = ssl.create_default_context() # Create a secure SSL context
 with smtplib.SMTP_SSL(
     config['sender']['server'], config['sender']['port'], context=context
