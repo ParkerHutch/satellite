@@ -52,12 +52,15 @@ with smtplib.SMTP_SSL(
 ) as server:
     try:
         server.login(config['sender']['username'], config['sender']['password'])
-    except:
+        try:
+            server.sendmail(
+                config['sender']['username'], config['recipient']['username'], message.as_string())
+            print("Sent the email")
+        except smtplib.SMTPException as err:
+            print('An error occurred while sending the email: \n', err)
+    except smtplib.SMTPException as err:
         print("Could not log into the email server. Please check \
             that the 'sender' values are correct in config.json.")
-    try:
-        server.sendmail(
-            config['sender']['username'], config['recipient']['username'], message.as_string())
-        print("Sent the email")
-    except:
-        print("An error occurred while sending the email.")
+        print('Error:\n', err)
+    finally:
+        server.quit()
