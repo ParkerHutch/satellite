@@ -26,7 +26,8 @@ message.attach(html_obj)
 """
     Create the attachment part of the message
 """
-filename = "attachment.jpg"  # In same directory as script
+#filename = "attachment.jpg"  # In same directory as script
+filename = 'images/image.jpg'
 
 # Open the attachment in binary reading mode
 with open(filename, "rb") as attachment:
