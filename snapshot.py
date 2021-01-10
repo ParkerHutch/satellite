@@ -38,6 +38,7 @@ def get_num_cameras(mount_num):
 def take_picture(device, output_file_directory):
     find_cameras() # TODO maybe make sure this is only run once
     if device == 'picamera':
+        global camera
         if camera is None:
             camera = PiCamera()
         
