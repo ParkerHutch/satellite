@@ -6,8 +6,35 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from os import path
+from os import walk
+
 config_file = open('./config.json')
 config = json.load(config_file)
+
+def get_attachment_paths():
+    attachments_path = './images'
+    paths = []
+    _, _, filenames = next(walk(attachments_path))
+    for filename in filenames:
+        paths.append(path.join(attachments_path, filename))
+    return paths
+
+def attach_file(message, attachment_path):
+    # Open the attachment in binary reading mode
+    with open(attachment_path, "rb") as attachment:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+
+    encoders.encode_base64(part) # Encode file in ASCII characters to send by email
+
+    # Add header as key/value pair to attachment part
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {attachment_path}",
+    )
+
+    message.attach(part) # attach attachment
 
 def send_email(attachment_path): # TODO make attachments an array
     message = MIMEMultipart("alternative")
@@ -24,6 +51,8 @@ def send_email(attachment_path): # TODO make attachments an array
 
     message.attach(html_obj)
 
+    attach_file(message, 'images/image.jpg')
+    """
     filename = attachment_path#'images/image.jpg'
 
     # Open the attachment in binary reading mode
@@ -40,6 +69,7 @@ def send_email(attachment_path): # TODO make attachments an array
     )
 
     message.attach(part) # attach attachment
+    """
 
     """ 
         Send the email
