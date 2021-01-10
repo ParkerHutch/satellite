@@ -14,7 +14,7 @@ def take_picture(device, output_file):
         print('inputs found:')
         inputs = subprocess.check_output(['fswebcam', '--list-inputs'])
         print('inputs return: ')
-        print(inputs.stdout)
+        print(inputs)
         print('taking picture')
         subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', '-q', output_file])
     else:
