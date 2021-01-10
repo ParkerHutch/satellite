@@ -14,7 +14,7 @@ def find_cameras():
     for i in range(10):
         num_cameras = get_num_cameras(i)
         if num_cameras > 0:
-            mounted_cameras[i] = num_cameras
+            mounted_cameras[f'/dev/video{i}'] = num_cameras
 
 
 # get the number of cameras installed for the given /dev/video mount.
@@ -48,7 +48,7 @@ def take_picture(device, output_file):
 def stop():
     camera.close()
 
-if __name__ == 'main':
+if __name__ == '__main__':
     print('finding cameras')
     find_cameras()
     print(mounted_cameras)
