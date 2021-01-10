@@ -2,13 +2,18 @@ from picamera import PiCamera
 import subprocess
 from time import sleep
 
-camera = PiCamera() # Make sure to close this
+try:
+    camera = PiCamera() # Make sure to close this
+except:
+    print('no official Raspberry Pi camera connected')
 
 def take_picture(device, output_file):
     if device == 'picamera':
         camera.capture(output_file)
     elif device == 'webcam':
         subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', output_file])
+    else:
+        print(f'device {device} is not supported')
 
 
 def stop():
