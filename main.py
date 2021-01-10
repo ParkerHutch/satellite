@@ -2,7 +2,7 @@ import snapshot
 import email_handler
 
 print('taking picture')
-snapshot.take_picture('picamera', 'images/') #TODO make this directory, if it doesn't exist errors occur
+snapshot.take_picture() #TODO make this directory, if it doesn't exist errors occur
 snapshot.stop()
 print('done')
 
