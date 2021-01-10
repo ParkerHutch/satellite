@@ -21,7 +21,7 @@ def find_cameras():
 
 # get the number of cameras installed for the given /dev/video mount.
 def get_num_cameras(mount_num):
-    cmd_output = subprocess.check_output(['script', '-q', '-c', f'(fswebcam --list-inputs -d /dev/video{mount_num})']).decode('utf-8')
+    cmd_output = subprocess.check_output(['script', '-q', '-c', f'(fswebcam --list-inputs -d /dev/video{mount_num})'], text=True)
     error_messages = ['Unable to query input 0.', 'No such file or directory', 'Message from syslogd@raspberrypi']
     if any(message in cmd_output for message in error_messages):
         return 0
