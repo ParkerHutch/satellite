@@ -62,7 +62,9 @@ def take_picture(device, output_file_directory):
 
 
 def stop():
-    camera.close()
+    global camera
+    if camera is not None:
+        camera.close()
 
 if __name__ == '__main__':
     print('finding cameras')
