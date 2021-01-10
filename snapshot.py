@@ -12,7 +12,7 @@ def take_picture(device, output_file):
         camera.capture(output_file)
     elif device == 'webcam':
         print('inputs found:')
-        inputs = subprocess.run(['fswebcam', '--list-inputs'], text=True)
+        inputs = subprocess.check_output(['fswebcam', '--list-inputs'])
         print('inputs return: ')
         print(inputs.stdout)
         print('taking picture')
