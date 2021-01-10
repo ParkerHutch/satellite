@@ -12,8 +12,8 @@ from os import walk
 config_file = open('./config.json')
 config = json.load(config_file)
 
-def get_attachment_paths():
-    attachments_path = './images'
+def get_attachment_paths(attachments_path):
+    #attachments_path = './images'
     paths = []
     _, _, filenames = next(walk(attachments_path))
     for filename in filenames:
@@ -36,7 +36,7 @@ def attach_file(message, attachment_path):
 
     message.attach(part) # attach attachment
 
-def send_email(attachment_path): # TODO make attachments an array
+def send_email(attachments_path): # TODO make attachments an array
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
@@ -51,7 +51,12 @@ def send_email(attachment_path): # TODO make attachments an array
 
     message.attach(html_obj)
 
-    attach_file(message, 'images/image.jpg')
+    for attachment_path in get_attachment_paths(attachments_path):
+        attach_file(message, attachment_path)
+    
+    #attach_file(message, 'images/image.jpg')
+
+
     """
     filename = attachment_path#'images/image.jpg'
 
