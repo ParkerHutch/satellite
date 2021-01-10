@@ -1,3 +1,4 @@
+import email
 import smtplib, ssl
 import json
 
@@ -8,6 +9,8 @@ from email.mime.multipart import MIMEMultipart
 
 import snapshot
 
+import email_handler
+"""
 config_file = open('./config.json')
 config = json.load(config_file)
 
@@ -16,23 +19,23 @@ message["Subject"] = "Email from Python"
 message["From"] = config['sender']['username']
 message["To"] = config['recipient']['username']
 
-"""
-    Create the HTML part of the message
-"""
 html = open('message.html', 'r').read()
 
 html_obj = MIMEText(html, "html")
 
 message.attach(html_obj)
+"""
 
-"""
-    Create the attachment part of the message
-"""
 print('taking picture')
 snapshot.take_picture('webcam', 'images/image.jpg')
 snapshot.stop()
 print('done')
 
+print('about to send email')
+email_handler.send_email('images/image.jpg')
+print('all done')
+
+"""
 filename = 'images/image.jpg'
 
 # Open the attachment in binary reading mode
@@ -50,9 +53,6 @@ part.add_header(
 
 message.attach(part) # attach attachment
 
-""" 
-    Send the email
-"""
 context = ssl.create_default_context() # Create a secure SSL context
 with smtplib.SMTP_SSL(
     config['sender']['server'], config['sender']['port'], context=context
@@ -71,3 +71,4 @@ with smtplib.SMTP_SSL(
         print('Error:\n', err)
     finally:
         server.quit()
+        """
