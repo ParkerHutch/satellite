@@ -29,7 +29,7 @@ message.attach(html_obj)
     Create the attachment part of the message
 """
 print('taking picture')
-snapshot.take_picture('images/image.jpg')
+snapshot.take_picture('webcam', 'images/image.jpg')
 snapshot.stop()
 print('done')
 

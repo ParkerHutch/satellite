@@ -1,10 +1,15 @@
 from picamera import PiCamera
+import subprocess
 from time import sleep
 
 camera = PiCamera() # Make sure to close this
 
-def take_picture(output_file):
-    camera.capture(output_file)
+def take_picture(device, output_file):
+    if device == 'picamera':
+        camera.capture(output_file)
+    elif device == 'webcam':
+        subprocess.run(['fswebcam'],[output_file])
+
 
 def stop():
     camera.close()
