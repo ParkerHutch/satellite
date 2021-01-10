@@ -2,7 +2,7 @@ import snapshot
 import email_handler
 
 print('taking picture')
-snapshot.take_picture('webcam', 'images/')
+snapshot.take_picture('picamera', 'images/')
 snapshot.stop()
 
-email_handler.send_email('images/')
+email_handler.send_email('images/image.jpg')

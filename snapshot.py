@@ -38,6 +38,9 @@ def get_num_cameras(mount_num):
 def take_picture(device, output_file_directory):
     find_cameras() # TODO maybe make sure this is only run once
     if device == 'picamera':
+        if camera is None:
+            camera = PiCamera()
+        
         camera.capture(output_file_directory + 'image.jpg')
     elif device == 'webcam':
         #print('inputs found:', get_num_cameras())
