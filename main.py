@@ -6,6 +6,8 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+import snapshot
+
 config_file = open('./config.json')
 config = json.load(config_file)
 
@@ -26,7 +28,6 @@ message.attach(html_obj)
 """
     Create the attachment part of the message
 """
-#filename = "attachment.jpg"  # In same directory as script
 filename = 'images/image.jpg'
 
 # Open the attachment in binary reading mode
