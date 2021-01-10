@@ -11,7 +11,10 @@ def take_picture(device, output_file):
     if device == 'picamera':
         camera.capture(output_file)
     elif device == 'webcam':
-        subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', output_file])
+        print('inputs found:')
+        subprocess.run(['fswebcam', '--list-inputs'])
+        print('taking picture')
+        subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', '-q', output_file])
     else:
         print(f'device {device} is not supported')
 
