@@ -51,8 +51,8 @@ def take_picture(device, output_file_directory):
 
         picture_num = 0
         for mount, cameras in mounted_cameras.items():
-            for camera in range(cameras):
-                print(f'Taking picture on mount{mount} with camera{camera}')
+            for camera_number in range(cameras):
+                print(f'Taking picture on mount{mount} with camera{camera_number}')
                 subprocess.run(['fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', '-q', output_file_directory + f'image{str(picture_num)}.jpg'])
                 picture_num += 1
 
