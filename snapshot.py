@@ -41,9 +41,9 @@ def take_picture(device, output_file_directory):
         if camera is None:
             camera = PiCamera()
         
-        print('taking picture with PiCamera')
+        print('taking picture with PiCamera') 
         camera.capture(output_file_directory + 'image.jpg')
-        
+
     elif device == 'webcam':
         find_cameras() # TODO maybe make sure this is only run once
         #print('inputs found:', get_num_cameras())
