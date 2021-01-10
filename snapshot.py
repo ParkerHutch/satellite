@@ -3,6 +3,7 @@ import subprocess
 from time import sleep
 
 try:
+    global camera
     camera = PiCamera() # Make sure to close this on program end
 except:
     print('no official Raspberry Pi camera connected')
@@ -23,7 +24,6 @@ def get_num_cameras(mount_num):
     cmd_output = subprocess.check_output(['script', '-q', '-c', f'(fswebcam --list-inputs -d /dev/video{mount_num})']).decode('utf-8')
     error_messages = ['Unable to query input 0.', 'No such file or directory', 'Message from syslogd@raspberrypi']
     if any(message in cmd_output for message in error_messages):
-        print(f'Error for {mount_num}')
         return 0
     else:
         # TODO delete automatically created typescript file
@@ -46,14 +46,12 @@ def take_picture(device, output_file_directory):
 
     elif device == 'webcam':
         find_cameras() # TODO maybe make sure this is only run once
-        #print('inputs found:', get_num_cameras())
-        print('taking pictures')
 
         picture_num = 0
         for mount, cameras in mounted_cameras.items():
             for camera_number in range(cameras):
                 print(f'Taking picture on mount{mount} with camera{camera_number}')
-                subprocess.run(['fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', '-q', output_file_directory + f'image{str(picture_num)}.jpg'])
+                subprocess.run(['fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', '-q', output_file_directory + f'image{str(picture_num)}.jpg'], text=True)
                 picture_num += 1
 
         #subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', '-q', output_file])
@@ -67,7 +65,6 @@ def stop():
         camera.close()
 
 if __name__ == '__main__':
-    print('finding cameras')
     find_cameras()
     print(mounted_cameras)
     stop()
