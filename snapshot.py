@@ -36,12 +36,20 @@ def get_num_cameras(mount_num):
 
 
 def take_picture(device, output_file):
+    find_cameras() # TODO maybe make sure this is only run once
     if device == 'picamera':
         camera.capture(output_file)
     elif device == 'webcam':
-        print('inputs found:', get_num_cameras())
-        print('taking picture')
-        subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', '-q', output_file])
+        #print('inputs found:', get_num_cameras())
+
+        print('taking pictures')
+
+        for mount, cameras in mounted_cameras:
+            for camera in range(cameras):
+                print(f'Taking picture on mount{mount} with camera{camera}')
+                subprocess.run(['fswebcam', '-r', '-d', mount, '1280x720', '--no-banner', '-q', output_file+camera])
+
+        #subprocess.run(['fswebcam', '-r', '1280x720', '--no-banner', '-q', output_file])
     else:
         print(f'device {device} is not supported')
 
