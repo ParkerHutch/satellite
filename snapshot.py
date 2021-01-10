@@ -8,7 +8,7 @@ def take_picture(device, output_file):
     if device == 'picamera':
         camera.capture(output_file)
     elif device == 'webcam':
-        subprocess.run(['fswebcam'],[output_file])
+        subprocess.run(['fswebcam', output_file])
 
 
 def stop():
