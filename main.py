@@ -30,7 +30,9 @@ message.attach(html_obj)
 """
 print('taking picture')
 snapshot.take_picture('images/image.jpg')
+snapshot.stop()
 print('done')
+
 filename = 'images/image.jpg'
 
 # Open the attachment in binary reading mode
