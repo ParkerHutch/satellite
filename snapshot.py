@@ -89,12 +89,14 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
             for _ in range(cameras):
                 # TODO route the output from below to a log file, then make sure it's not displayed in console
                 f.write(f'Taking picture with device {mount}\n')
+                f.flush()
                 subprocess.run([
                     'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
                     '-q', 
                     output_file_directory + f'image{str(picture_num)}.jpg'
                 ], stdout=f, stderr=f)
                 f.write(f'Finished taking picture with device{mount}\n')
+                f.flush()
                 picture_num += 1
         f.close()
     elif device.startswith('/dev/video'):
