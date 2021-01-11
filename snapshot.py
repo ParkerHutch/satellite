@@ -9,7 +9,7 @@ import os
 """
 capture_args = [
     '--resolution', '1280x720',
-    #'--frames', '5',
+    '--frames', '5',
     '--delay', '3'
 ]
 processing_args = [
