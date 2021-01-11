@@ -105,7 +105,7 @@ def clear_directory(images_directory_path: str): # TODO add array of file extens
             print(f'removing file {f}')
             os.remove(os.path.join(images_directory_path, f))
     elif not os.path.exists(images_directory_path):
-        # create directory
+        os.makedirs(images_directory_path)
         pass
     else:
         print('Error: images directory is actually a file.') # TODO raise exception
