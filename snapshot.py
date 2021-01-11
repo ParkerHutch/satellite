@@ -82,7 +82,6 @@ def get_num_cameras(mount_num: int) -> int:
         return largest_device_index + 1
 
 def take_fswebcam_picture(device: str, output_file_path: str):
-    #f.write(f'Taking picture with device {mount}\n')
     f = open('./camera_log.txt', 'a')
     f.flush()
     subprocess.run([
@@ -125,31 +124,15 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
         f = open('./camera_log.txt', 'a')
         for mount, cameras in find_devices().items(): # TODO rename mount variable
             for _ in range(cameras):
-                print('using function to take picture')
                 take_fswebcam_picture(
                     mount, 
                     output_file_directory + f'image{str(picture_num)}'
                 )
-                """
-                f.write(f'Taking picture with device {mount}\n')
-                f.flush()
-                subprocess.run([
-                    'fswebcam', '-r', '1280x720', '-d', mount, 
-                    '-q', '--banner-colour', '#FF0000', '--no-shadow', 
-                    '--font', 'sans:20', '--title', f'DEVICE: {mount}', 
-                    '--no-subtitle', '--no-info', 
-                    output_file_directory + f'image{str(picture_num)}.jpg'
-                ], stdout=f, stderr=f)
-                f.write(f'Finished taking picture with device{mount}\n')
-                f.flush()
-                """
                 picture_num += 1
         f.close()
     elif camera_device.startswith('/dev/video'):
-        subprocess.run([
-            'fswebcam', '-r', '1280x720', '-d', camera_device, '--no-banner', '-q', 
-            output_file_directory + f'image.jpg'
-        ])
+        take_fswebcam_picture(camera_device, 
+            output_file_directory + 'image.jpg')
     else:
         print(f'device {camera_device} is not supported')
 
