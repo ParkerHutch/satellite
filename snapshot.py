@@ -4,6 +4,10 @@ from time import sleep #TODO do I need this?
 from typing import Dict
 import os
 
+tuning_args = ['-r', '1280x720']
+processing_args = ['--banner-colour', '#FF0000', '--no-shadow', 
+        '--font', 'sans:20',  
+        '--no-subtitle', '--no-info']
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
 # TODO separate args into tuning and output arrays that are combined
@@ -74,7 +78,6 @@ def get_num_cameras(mount_num: int) -> int:
     if any(message in cmd_output for message in error_messages):
         return 0
     else:
-        # TODO delete automatically created typescript file
         start = 'Available inputs:'
         end = 'No input was specified'
         inputs_found = (cmd_output.split(start)[1]).split(end)[0]
@@ -100,6 +103,16 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
+    args = ['fswebcam', '-q', '-d', device, '--title', f'DEVICE: {device}']
+    args.extend(tuning_args)
+    args.extend(processing_args)
+    print(args)
+    subprocess.run([
+        args,
+        image_file_path +'.jpg'
+    ], stdout=f, stderr=f)
+
+    """
     subprocess.run([
         'fswebcam', '-r', '1280x720', '-d', device, 
         '-q', '--banner-colour', '#FF0000', '--no-shadow', 
@@ -107,6 +120,7 @@ def take_fswebcam_picture(device: str, log_file_path: str,
         '--no-subtitle', '--no-info', 
         image_file_path +'.jpg'
     ], stdout=f, stderr=f)
+    """
     f.write('DONE\n')
     f.flush()
     f.close()
