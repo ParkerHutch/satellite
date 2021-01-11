@@ -97,18 +97,18 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f.flush()
     f.close()
 
-def take_picture(camera_device: str = 'all', output_file_directory: str = "./images/"):
+def take_picture(camera_device: str = 'all', images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
 
     Args:
         camera_device (str, optional): The device to use to take pictures. Defaults to
         'all'.
-        output_file_directory (str, optional): The relative filepath to store
+        images_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
     if camera_device == 'picamera':
-        camera.capture(output_file_directory + 'image.jpg')
+        camera.capture(images_directory + 'image.jpg')
     elif camera_device == 'all':
         # Take a picture on all connected USB cameras
         
@@ -117,7 +117,7 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
 
         # Take a picture on the PiCamera
         if camera is not None:
-            camera.capture(output_file_directory + f'image{picture_num}.jpg')
+            camera.capture(images_directory + f'image{picture_num}.jpg')
             picture_num += 1
 
         # Clear the camera_log.txt file if it exists
@@ -129,12 +129,12 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
                 take_fswebcam_picture(
                     device_path, 
                     log_file_path,
-                    output_file_directory + f'image{str(picture_num)}'
+                    images_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device, 
-            output_file_directory + 'image.jpg')
+            images_directory + 'image.jpg')
     else:
         print(f'device {camera_device} is not supported')
 
