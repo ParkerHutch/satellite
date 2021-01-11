@@ -81,8 +81,9 @@ def get_num_cameras(mount_num: int) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
-def take_fswebcam_picture(device: str, output_file_path: str):
-    f = open('./camera_log.txt', 'a')
+def take_fswebcam_picture(device: str, log_file_path: str, 
+                            image_file_path: str):
+    f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
     subprocess.run([
@@ -90,12 +91,11 @@ def take_fswebcam_picture(device: str, output_file_path: str):
         '-q', '--banner-colour', '#FF0000', '--no-shadow', 
         '--font', 'sans:20', '--title', f'DEVICE: {device} TEST FROM FUNC', 
         '--no-subtitle', '--no-info', 
-        output_file_path +'.jpg'
+        image_file_path +'.jpg'
     ], stdout=f, stderr=f)
     f.write('DONE\n')
     f.flush()
     f.close()
-    pass
 
 def take_picture(camera_device: str = 'all', output_file_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
@@ -121,17 +121,17 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
             picture_num += 1
 
         # Clear the camera_log.txt file if it exists
-        open('./camera_log.txt', 'w').close()
+        log_file_path = './camera_log.txt'
+        open(log_file_path, 'w').close()
 
-        f = open('./camera_log.txt', 'a')
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
                 take_fswebcam_picture(
                     device_path, 
+                    log_file_path,
                     output_file_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
-        f.close()
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device, 
             output_file_directory + 'image.jpg')
