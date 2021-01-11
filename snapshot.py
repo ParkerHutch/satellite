@@ -98,9 +98,10 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f.flush()
     f.close()
 
-def clear_directory(images_directory_path: str): # TODO add array of file extensions to remove
+def prepare_directory(images_directory_path: str): # TODO add array of file extensions to remove
     if os.path.isdir(images_directory_path):
-        files = [ f for f in os.listdir(images_directory_path) if f.endswith('.jpg') or f.startswith('image')]
+        files = [ f for f in os.listdir(images_directory_path) 
+                        if f.endswith('.jpg') or f.startswith('image')]
         for f in files:
             print(f'removing file {f}')
             os.remove(os.path.join(images_directory_path, f))
@@ -120,12 +121,14 @@ def take_picture(camera_device: str = 'all', images_directory: str = "./images/"
         images_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
+
+    prepare_directory(images_directory)
+
     if camera_device == 'picamera':
         camera.capture(images_directory + 'image.jpg')
     elif camera_device == 'all':
         # Take a picture on all connected USB cameras
         
-        # TODO maybe generate random number if images already exist
         picture_num = 0
 
         # Take a picture on the PiCamera
@@ -159,7 +162,7 @@ def stop():
 
 if __name__ == '__main__':
     print('Clearing directory')
-    clear_directory('./images/')
+    prepare_directory('./images/')
     print('Cameras found:')
     print(find_devices())
     stop()
