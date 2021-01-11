@@ -68,15 +68,13 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
         output_file_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
+    global camera
     if device == 'picamera':
-        global camera
         print('taking picture with PiCamera') 
         camera.capture(output_file_directory + 'image.jpg')
     elif device == 'all':
         picture_num = 0 # TODO maybe generate random number if images already exist
-
         # Take a picture on the PiCamera
-        global camera
         if camera is not None:
             camera.capture(output_file_directory + 'image.jpg')
             picture_num += 1
