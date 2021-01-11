@@ -103,14 +103,11 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
-    args = ['fswebcam', '-q', '-d', device, '--title', f'DEVICE: {device}']
+    args = ['fswebcam', '-q', '-d', device, '--title', f'DEVICE: {device}', '--save', image_file_path +'.jpg']
     args.extend(tuning_args)
     args.extend(processing_args)
     print(args)
-    subprocess.run([
-        args,
-        image_file_path +'.jpg'
-    ], stdout=f, stderr=f)
+    subprocess.run(args, stdout=f, stderr=f)
 
     """
     subprocess.run([
