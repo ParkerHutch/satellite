@@ -1,6 +1,7 @@
 from picamera import PiCamera
 import subprocess
-from time import sleep
+from time import sleep #TODO do I need this?
+from typing import Dict
 
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
@@ -13,7 +14,7 @@ except:
     print('no official Raspberry Pi camera connected')
 
 
-def find_devices(search_range: int = 10) -> dict[str, int]:
+def find_devices(search_range: int = 10) -> Dict[str, int]:
     """Return a dictionary of device filepaths as keys and the corresponding 
     number of cameras as values. Only devices that have 1 or more cameras are
     stored. If the PiCamera is connected, it will not be included in this list.
