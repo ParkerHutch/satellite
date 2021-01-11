@@ -88,7 +88,21 @@ def get_num_cameras(mount_num: int) -> int:
         return largest_device_index + 1
 
 def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
-    # TODO add includeProcessing variable, only add title and processing if it's true
+    """Generates an array of arguments to add to the 'fswebcam' command to take 
+    a picture on the given device and store it in the file given by 
+    image_file_path. The tuning_args array is used to supply arguments 
+    associated with tuning the camera, and the processing_args array is used,
+    if include_processing is True, to process the image after it is taken.  
+
+    Args:
+        device (str): The name of the device to use to take a picture, usually
+        begins with /dev/video.
+        image_file_path (str): The path to the file to store the image in.
+
+    Returns:
+        List[str]: a list of arguments to use in conjuction with the fswebcam
+        command.
+    """
     args = ['fswebcam', '-q', '-d', device]
     args.extend(tuning_args)
     if include_processing:
