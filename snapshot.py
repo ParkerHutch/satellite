@@ -25,8 +25,6 @@ def find_devices():
         if num_cameras > 0:
             devices[f'/dev/video{i}'] = num_cameras
 
-    
-
 def get_num_cameras(mount_num: int) -> int:
     """Get the number of cameras associated with the given video device. To 
     find the number of cameras, this function calls fswebcam with the
@@ -54,9 +52,10 @@ def get_num_cameras(mount_num: int) -> int:
         # TODO delete automatically created typescript file
         start = 'Available inputs:'
         end = 'No input was specified'
-        first_run = (cmd_output.split(start)[1]).split(end)[0]
-        last_colon_index = first_run.rfind(':')
-        largest_device_index = int(first_run[last_colon_index - 1: last_colon_index])
+        inputs_found = (cmd_output.split(start)[1]).split(end)[0]
+        last_colon_index = inputs_found.rfind(':')
+        largest_device_index = int(
+            inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
 def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
@@ -71,25 +70,30 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
     """
     global camera
     if device == 'picamera':
-        print('taking picture with PiCamera') 
         camera.capture(output_file_directory + 'image.jpg')
     elif device == 'all':
         picture_num = 0 # TODO maybe generate random number if images already exist
         # Take a picture on the PiCamera
         if camera is not None:
-            camera.capture(output_file_directory + 'image.jpg')
+            camera.capture(output_file_directory + f'image{picture_num}.jpg')
             picture_num += 1
         
         # Take a picture on all connected USB cameras
         find_devices() # TODO maybe make sure this is only run once
-        for mount, cameras in devices.items():
-            for camera_number in range(cameras):
-                print(f'Taking picture on mount{mount} with camera{camera_number}') # TODO add banners
+        for mount, cameras in devices.items(): # TODO rename mount variable
+            for _ in range(cameras):
                 # TODO route the output from below to a log file, then make sure it's not displayed in console
-                subprocess.run(['fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', '-q', output_file_directory + f'image{str(picture_num)}.jpg'])
+                subprocess.run([
+                    'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
+                    '-q', 
+                    output_file_directory + f'image{str(picture_num)}.jpg'
+                ])
                 picture_num += 1
     elif device.startswith('/dev/video'):
-        subprocess.run(['fswebcam', '-r', '1280x720', '-d', device, '--no-banner', '-q', output_file_directory + f'image.jpg'])
+        subprocess.run([
+            'fswebcam', '-r', '1280x720', '-d', device, '--no-banner', '-q', 
+            output_file_directory + f'image.jpg'
+        ])
     else:
         print(f'device {device} is not supported')
 
@@ -103,5 +107,6 @@ def stop():
 
 if __name__ == '__main__':
     find_devices()
+    print('Devices found:')
     print(devices)
     stop()
