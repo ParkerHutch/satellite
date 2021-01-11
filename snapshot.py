@@ -8,7 +8,9 @@ import os
     fswebcam arguments for image capture and processing
 """
 capture_args = [
-    '-r', '1280x720'
+    '--resolution', '1280x720',
+    '--palette', 'JPEG',
+    '--frames', '10'#,'--skip', '2'
 ]
 processing_args = [
     '--banner-colour', '#FF0000', 
