@@ -94,6 +94,8 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     if include_processing:
         args.extend(processing_args)
         args.extend(['--title', f'DEVICE: {device}']) 
+    else:
+        args.extend(['--no-banner'])
     args.extend([image_file_path + '.jpg'])
     return args
 
