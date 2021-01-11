@@ -1,5 +1,6 @@
 from picamera import PiCamera
 import subprocess
+from datetime import datetime
 from time import sleep #TODO do I need this?
 from typing import Dict, List
 import os
@@ -9,7 +10,6 @@ import os
 """
 capture_args = [
     '--resolution', '1280x720',
-    '--frames', '5',
     '--delay', '3'
 ]
 processing_args = [
@@ -117,7 +117,11 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     args.extend(capture_args)
     if include_processing:
         args.extend(processing_args)
-        args.extend(['--title', f'DEVICE: {device}']) 
+        timestamp_text = datetime.now().strftime('%m/%d/%Y %I:%M %p')
+        args.extend([
+            '--title', f'DEVICE: {device}',
+            '--timestamp', timestamp_text
+        ]) 
     else:
         args.extend(['--no-banner'])
     args.extend([image_file_path + '.jpg'])
@@ -223,6 +227,7 @@ def stop():
         camera.close()
 
 if __name__ == '__main__':
+    print(f'Current time: {datetime.now().strftime("%m/%d/%Y %I:%M %p")}')
     print('Clearing directory')
     prepare_directory('./images/')
     print('Cameras found:')
