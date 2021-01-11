@@ -94,7 +94,7 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
                 f.write(f'Taking picture with device {mount}\n')
                 f.flush()
                 subprocess.run([
-                    'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
+                    'fswebcam', '-r', '1280x720', '-d', mount, 
                     '-q', '--banner-colour', '#FF0000', '--no-shadow', '--title', 'Title test', 
                     '--subtitle', 'Subtitle test', '--info', 'Info test', 
                     output_file_directory + f'image{str(picture_num)}.jpg'
