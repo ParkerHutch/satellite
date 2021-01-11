@@ -20,9 +20,9 @@ processing_args = [
 # Whether to include the processing arguments when taking a photo with fswebcam
 include_processing: bool = True 
 
-camera = None
+pi_camera = None
 try:
-    camera = PiCamera() # Make sure to close this on program end
+    pi_camera = PiCamera() # Make sure to close this on program end
 except:
     print('no official Raspberry Pi camera connected')
 
@@ -138,14 +138,16 @@ def take_fswebcam_picture(device: str, log_file_path: str,
         image_file_path (str): The output image's file path and name
     """
 
-    f = open(log_file_path, 'a')
-    f.write(f'Attempting to take a picture on the {device} device\n')
-    f.flush()
-    subprocess.run(get_fswebcam_capture_args(device, image_file_path), stdout=f, stderr=f)
+    log_file = open(log_file_path, 'a')
+    log_file.write(f'Attempting to take a picture on the {device} device\n')
+    log_file.flush()
+    subprocess.run(get_fswebcam_capture_args(device, image_file_path), 
+                                                stdout=log_file, 
+                                                stderr=log_file)
 
-    f.write('DONE\n')
-    f.flush()
-    f.close()
+    log_file.write('DONE\n')
+    log_file.flush()
+    log_file.close()
 
 def prepare_directory(images_directory_path: str): 
     """Sets up the directory with given path so that it can hold incoming
@@ -187,15 +189,15 @@ def take_picture(camera_device: str = 'all', images_directory: str = "./images/"
     prepare_directory(images_directory)
 
     if camera_device == 'picamera':
-        camera.capture(images_directory + 'image.jpg')
+        pi_camera.capture(images_directory + 'image.jpg')
     elif camera_device == 'all':
         # Take a picture on all connected USB cameras
         
         picture_num = 0
 
         # Take a picture on the PiCamera
-        if camera is not None:
-            camera.capture(images_directory + f'image{picture_num}.jpg')
+        if pi_camera is not None:
+            pi_camera.capture(images_directory + f'image{picture_num}.jpg')
             picture_num += 1
 
         # Clear the camera_log.txt file if it exists
@@ -219,8 +221,8 @@ def take_picture(camera_device: str = 'all', images_directory: str = "./images/"
 def stop():
     """Close the PiCamera if it was initialized.
     """
-    if camera is not None:
-        camera.close()
+    if pi_camera is not None:
+        pi_camera.close()
 
 if __name__ == '__main__':
     print(f'Current time: {datetime.now().strftime("%m/%d/%Y %I:%M %p")}')
