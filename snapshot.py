@@ -9,6 +9,7 @@ processing_args = ['--banner-colour', '#FF0000', '--no-shadow',
         '--font', 'sans:20',  
         '--no-subtitle', '--no-info']
 include_processing: bool = False
+
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
 # TODO separate args into tuning and output arrays that are combined
@@ -139,15 +140,17 @@ def take_fswebcam_picture(device: str, log_file_path: str,
 # TODO add array of file extensions to remove
 def prepare_directory(images_directory_path: str): 
     """Sets up the directory with given path so that it can hold incoming
-    images. If the folder exists, any file with the .jpg extension or 'image'
-    prefix is removed. If the folder doesn't exist, it is created. If the given
-    path specifies a file, a warning is raised.
+    images. If the folder exists, any file with a image extension (see
+    img_extensions array) or 'image' prefix is removed. If the folder doesn't
+    exist, it is created. If the given path specifies a file, a warning is
+    raised.
 
     Args:
         images_directory_path (str): The path to the folder that should be 
         prepared to hold images
     """
 
+    # Files with these extensions will be removed
     img_extensions = ['.jpg', '.png']
     if os.path.isdir(images_directory_path):
         files = [ 
