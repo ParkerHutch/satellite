@@ -3,7 +3,10 @@ import subprocess
 from time import sleep
 
 devices = {}
-
+# TODO use -palette option with fswebcam to take jpeg pictures
+# TODO experiment with fswebcam flags for better pictures
+# TODO separate args into tuning and output arrays that are combined
+# whenever a photo is taken (use array unpacking?)
 try:
     global camera
     camera = PiCamera() # Make sure to close this on program end
@@ -92,7 +95,8 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
                 f.flush()
                 subprocess.run([
                     'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
-                    '-q', 
+                    '-q', '--banner-colour', '#FF0000', '--no-shadow', '--title', 'Title test', 
+                    '--subtitle', 'Subtitle test', '--info', 'Info test', 
                     output_file_directory + f'image{str(picture_num)}.jpg'
                 ], stdout=f, stderr=f)
                 f.write(f'Finished taking picture with device{mount}\n')
