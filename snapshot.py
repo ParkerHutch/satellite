@@ -14,18 +14,22 @@ except:
     print('no official Raspberry Pi camera connected')
 
 
-def find_devices():
+def find_devices(search_range: int = 10):
     """Create a dictionary of device filepaths as keys and the corresponding 
     number of cameras as values. Only devices that have 1 or more cameras are
     stored. If the PiCamera is connected, it will not be included in this list.
+
+    Args:
+        search_range (int, optional): The number of /dev/video{number} devices
+        to check. Defaults to 10.
     """
 
     global devices 
     devices = {}
-    for i in range(10):
-        num_cameras = get_num_cameras(i)
-        if num_cameras > 0:
-            devices[f'/dev/video{i}'] = num_cameras
+    for i in range(search_range):
+        device_cameras = get_num_cameras(i)
+        if device_cameras > 0:
+            devices[f'/dev/video{i}'] = device_cameras
 
 def get_num_cameras(mount_num: int) -> int:
     """Get the number of cameras associated with the given video device. To 
