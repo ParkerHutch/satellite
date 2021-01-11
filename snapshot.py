@@ -80,14 +80,17 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
         
         # Take a picture on all connected USB cameras
         find_devices() # TODO maybe make sure this is only run once
+
+        f = open('./blah.txt', 'w')
         for mount, cameras in devices.items(): # TODO rename mount variable
             for _ in range(cameras):
                 # TODO route the output from below to a log file, then make sure it's not displayed in console
+                
                 subprocess.run([
                     'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
                     '-q', 
                     output_file_directory + f'image{str(picture_num)}.jpg'
-                ])
+                ], stdout='./blah.txt')
                 picture_num += 1
     elif device.startswith('/dev/video'):
         subprocess.run([
