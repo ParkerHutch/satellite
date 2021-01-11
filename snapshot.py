@@ -9,8 +9,8 @@ import os
 """
 capture_args = [
     '--resolution', '1280x720',
-    '--frames', '10',
-    '--skip', '2'
+    #'--frames', '5',
+    '--delay', '3'
 ]
 processing_args = [
     '--banner-colour', '#FF0000', 
