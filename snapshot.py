@@ -9,10 +9,8 @@ devices = {}
 # whenever a photo is taken (use array unpacking?)
 camera = None
 try:
-    #global camera
     camera = PiCamera() # Make sure to close this on program end
 except:
-    #camera = None
     print('no official Raspberry Pi camera connected')
 
 
@@ -72,7 +70,6 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
         output_file_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
-    #global camera
     if device == 'picamera':
         camera.capture(output_file_directory + 'image.jpg')
     elif device == 'all':
@@ -117,7 +114,6 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
 def stop():
     """Close the PiCamera if it was initialized.
     """
-    #global camera
     if camera is not None:
         camera.close()
 
