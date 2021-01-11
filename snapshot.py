@@ -61,7 +61,7 @@ def get_num_cameras(mount_num: int) -> int:
     cmd_output = subprocess.check_output(
         [
             'script', '-q', '-c', 
-            f'(fswebcam --list-inputs -d /dev/video{mount_num})'
+            f'(fswebcam --list-inputs -d /dev/video{mount_num})', '/dev/null'
         ], 
         text=True
     )
@@ -84,13 +84,25 @@ def get_num_cameras(mount_num: int) -> int:
 
 def take_fswebcam_picture(device: str, log_file_path: str, 
                             image_file_path: str):
+    """Uses the 'fswebcam' command to take a picture using the given device, 
+    storing the image in the given image file path and appending the terminal
+    output to the log file given by the log file path.
+
+    Args:
+        device (str): The device to use to take a picture. Usually begins with
+        /dev/video.
+        log_file_path (str): The path to the file where command line output 
+        should be appended.
+        image_file_path (str): The output image's file path and name
+    """
+
     f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
     subprocess.run([
         'fswebcam', '-r', '1280x720', '-d', device, 
         '-q', '--banner-colour', '#FF0000', '--no-shadow', 
-        '--font', 'sans:20', '--title', f'DEVICE: {device} TEST FROM FUNC', 
+        '--font', 'sans:20', '--title', f'DEVICE: {device}', 
         '--no-subtitle', '--no-info', 
         image_file_path +'.jpg'
     ], stdout=f, stderr=f)
@@ -98,16 +110,25 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f.flush()
     f.close()
 
-def prepare_directory(images_directory_path: str): # TODO add array of file extensions to remove
+# TODO add array of file extensions to remove
+def prepare_directory(images_directory_path: str): 
+    """Sets up the directory with given path so that it can hold incoming
+    images. If the folder exists, any file with the .jpg extension or 'image'
+    prefix is removed. If the folder doesn't exist, it is created. If the given
+    path specifies a file, a warning is raised.
+
+    Args:
+        images_directory_path (str): The path to the folder that should be 
+        prepared to hold images
+    """
+
     if os.path.isdir(images_directory_path):
         files = [ f for f in os.listdir(images_directory_path) 
                         if f.endswith('.jpg') or f.startswith('image')]
         for f in files:
-            print(f'removing file {f}')
             os.remove(os.path.join(images_directory_path, f))
     elif not os.path.exists(images_directory_path):
         os.makedirs(images_directory_path)
-        pass
     else:
         print('Error: images directory is actually a file.') # TODO raise exception
     
