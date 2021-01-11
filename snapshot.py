@@ -9,7 +9,7 @@ import os
 """
 capture_args = [
     '--resolution', '1280x720',
-    '--palette', 'JPEG',
+    #'--palette', 'JPEG',
     '--frames', '10'#,'--skip', '2'
 ]
 processing_args = [
@@ -19,7 +19,7 @@ processing_args = [
     '--no-subtitle', 
     '--no-info']
 # Whether to include the processing arguments when taking a photo with fswebcam
-include_processing: bool = False 
+include_processing: bool = True 
 
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
