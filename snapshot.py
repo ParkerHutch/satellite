@@ -83,6 +83,7 @@ def get_num_cameras(mount_num: int) -> int:
 
 def take_fswebcam_picture(device: str, output_file_path: str):
     f = open('./camera_log.txt', 'a')
+    f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
     subprocess.run([
         'fswebcam', '-r', '1280x720', '-d', device, 
@@ -91,7 +92,7 @@ def take_fswebcam_picture(device: str, output_file_path: str):
         '--no-subtitle', '--no-info', 
         output_file_path +'.jpg'
     ], stdout=f, stderr=f)
-    f.write(f'Finished taking picture with device{device}\n')
+    f.write('DONE\n')
     f.flush()
     f.close()
     pass
@@ -112,7 +113,8 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
         # Take a picture on all connected USB cameras
         
         # TODO maybe generate random number if images already exist
-        picture_num = 0 
+        picture_num = 0
+
         # Take a picture on the PiCamera
         if camera is not None:
             camera.capture(output_file_directory + f'image{picture_num}.jpg')
@@ -122,10 +124,10 @@ def take_picture(camera_device: str = 'all', output_file_directory: str = "./ima
         open('./camera_log.txt', 'w').close()
 
         f = open('./camera_log.txt', 'a')
-        for mount, cameras in find_devices().items(): # TODO rename mount variable
+        for device_path, cameras in find_devices().items():
             for _ in range(cameras):
                 take_fswebcam_picture(
-                    mount, 
+                    device_path, 
                     output_file_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
