@@ -1,13 +1,11 @@
-import smtplib, ssl
 import json
-
+import smtplib
+import ssl
 from email import encoders
 from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-from os import path
-from os import walk
+from email.mime.text import MIMEText
+from os import path, walk
 
 config_file = open('./config.json')
 config = json.load(config_file)
