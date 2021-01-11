@@ -4,16 +4,23 @@ from time import sleep #TODO do I need this?
 from typing import Dict, List
 import os
 
-tuning_args = ['-r', '1280x720']
-processing_args = ['--banner-colour', '#FF0000', '--no-shadow', 
-        '--font', 'sans:20',  
-        '--no-subtitle', '--no-info']
-include_processing: bool = False
+""" 
+    fswebcam arguments for image capture and processing
+"""
+capture_args = [
+    '-r', '1280x720'
+]
+processing_args = [
+    '--banner-colour', '#FF0000', 
+    '--font', 'sans:20',
+    '--no-shadow',
+    '--no-subtitle', 
+    '--no-info']
+# Whether to include the processing arguments when taking a photo with fswebcam
+include_processing: bool = False 
 
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
-# TODO separate args into tuning and output arrays that are combined
-# whenever a photo is taken (use array unpacking?)
 camera = None
 try:
     camera = PiCamera() # Make sure to close this on program end
@@ -91,8 +98,8 @@ def get_num_cameras(mount_num: int) -> int:
 def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     """Generates an array of arguments to add to the 'fswebcam' command to take 
     a picture on the given device and store it in the file given by 
-    image_file_path. The tuning_args array is used to supply arguments 
-    associated with tuning the camera, and the processing_args array is used,
+    image_file_path. The capture_args array is used to supply arguments 
+    associated with image capture, and the processing_args array is used,
     if include_processing is True, to process the image after it is taken.  
 
     Args:
@@ -105,7 +112,7 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
         command.
     """
     args = ['fswebcam', '-q', '-d', device]
-    args.extend(tuning_args)
+    args.extend(capture_args)
     if include_processing:
         args.extend(processing_args)
         args.extend(['--title', f'DEVICE: {device}']) 
