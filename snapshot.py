@@ -1,7 +1,6 @@
 from picamera import PiCamera
 import subprocess
 from datetime import datetime
-from time import sleep #TODO do I need this?
 from typing import Dict, List
 import os
 
@@ -21,8 +20,6 @@ processing_args = [
 # Whether to include the processing arguments when taking a photo with fswebcam
 include_processing: bool = True 
 
-# TODO use -palette option with fswebcam to take jpeg pictures
-# TODO experiment with fswebcam flags for better pictures
 camera = None
 try:
     camera = PiCamera() # Make sure to close this on program end
@@ -150,7 +147,6 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f.flush()
     f.close()
 
-# TODO add array of file extensions to remove
 def prepare_directory(images_directory_path: str): 
     """Sets up the directory with given path so that it can hold incoming
     images. If the folder exists, any file with a image extension (see
