@@ -2,6 +2,7 @@ from picamera import PiCamera
 import subprocess
 from time import sleep #TODO do I need this?
 from typing import Dict
+import os
 
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
@@ -97,6 +98,18 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f.flush()
     f.close()
 
+def clear_directory(images_directory_path: str): # TODO add array of file extensions to remove
+    if os.path.isdir(images_directory_path):
+        files = [ f for f in os.listdir(images_directory_path) if f.endswith('.jpg') or f.startswith('image')]
+        for f in files:
+            print(f'removing file {f}')
+            os.remove(os.path.join(images_directory_path, f))
+    elif not os.path.exists(images_directory_path):
+        # create directory
+        pass
+    else:
+        print('Error: images directory is actually a file.') # TODO raise exception
+    
 def take_picture(camera_device: str = 'all', images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
@@ -145,6 +158,8 @@ def stop():
         camera.close()
 
 if __name__ == '__main__':
+    print('Clearing directory')
+    clear_directory('./images/')
     print('Cameras found:')
     print(find_devices())
     stop()
