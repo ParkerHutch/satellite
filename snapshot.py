@@ -1,7 +1,7 @@
 from picamera import PiCamera
 import subprocess
 from time import sleep #TODO do I need this?
-from typing import Dict
+from typing import Dict, List
 import os
 
 tuning_args = ['-r', '1280x720']
@@ -86,6 +86,14 @@ def get_num_cameras(mount_num: int) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
+def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
+    # TODO add includeProcessing variable, only add title and processing if it's true
+    args = ['fswebcam', '-q', '-d', device]
+    args.extend(tuning_args)
+    args.extend(processing_args)
+    args.extend(['--title', f'DEVICE: {device}']) 
+    args.extend([image_file_path + '.jpg'])
+    return args
 def take_fswebcam_picture(device: str, log_file_path: str, 
                             image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
@@ -103,23 +111,15 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
+    """
     args = ['fswebcam', '-q', '-d', device]
     args.extend(tuning_args)
     args.extend(processing_args)
     args.extend(['--title', f'DEVICE: {device}']) # TODO add includeProcessing variable, only add title and processing if it's true
     args.extend([image_file_path + '.jpg'])
-    print(args)
-    subprocess.run(args, stdout=f, stderr=f)
+    """
+    subprocess.run(get_fswebcam_capture_args(device, image_file_path), stdout=f, stderr=f)
 
-    """
-    subprocess.run([
-        'fswebcam', '-r', '1280x720', '-d', device, 
-        '-q', '--banner-colour', '#FF0000', '--no-shadow', 
-        '--font', 'sans:20', '--title', f'DEVICE: {device}', 
-        '--no-subtitle', '--no-info', 
-        image_file_path +'.jpg'
-    ], stdout=f, stderr=f)
-    """
     f.write('DONE\n')
     f.flush()
     f.close()
