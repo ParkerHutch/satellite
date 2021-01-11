@@ -1,9 +1,8 @@
 import snapshot
 import email_handler
 
-print('taking picture')
-snapshot.take_picture() #TODO make this directory, if it doesn't exist errors occur
+#TODO make the images directory, if it doesn't exist errors occur
+snapshot.take_picture()
 snapshot.stop()
-print('done')
 
 email_handler.send_email('images/')
