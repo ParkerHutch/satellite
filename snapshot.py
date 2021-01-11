@@ -148,9 +148,11 @@ def prepare_directory(images_directory_path: str):
         prepared to hold images
     """
 
+    img_extensions = ['.jpg', '.png']
     if os.path.isdir(images_directory_path):
         files = [ f for f in os.listdir(images_directory_path) 
-                        if f.endswith('.jpg') or f.startswith('image')]
+                        if f.endswith(tuple(img_extensions)) 
+                        or f.startswith('image')]
         for f in files:
             os.remove(os.path.join(images_directory_path, f))
     elif not os.path.exists(images_directory_path):
