@@ -57,11 +57,12 @@ def get_num_cameras(mount_num: int) -> int:
         /dev/video{mount_num}.
     """
 
-    # Run a command to check the device's inputs and store the output
+    # Run a command to check the device's inputs and capture the output
     cmd_output = subprocess.check_output(
         [
             'script', '-q', '-c', 
-            f'(fswebcam --list-inputs -d /dev/video{mount_num})', '/dev/null'
+            f'(fswebcam --list-inputs -d /dev/video{mount_num})', 
+            '/dev/null'
         ], 
         text=True
     )

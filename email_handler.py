@@ -11,7 +11,6 @@ config_file = open('./config.json')
 config = json.load(config_file)
 
 def get_attachment_paths(attachments_path):
-    #attachments_path = './images'
     paths = []
     _, _, filenames = next(walk(attachments_path))
     for filename in filenames:
@@ -52,28 +51,6 @@ def send_email(attachments_path): # TODO make attachments an array
     for attachment_path in get_attachment_paths(attachments_path):
         attach_file(message, attachment_path)
     
-    #attach_file(message, 'images/image.jpg')
-
-
-    """
-    filename = attachment_path#'images/image.jpg'
-
-    # Open the attachment in binary reading mode
-    with open(filename, "rb") as attachment:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(attachment.read())
-
-    encoders.encode_base64(part) # Encode file in ASCII characters to send by email
-
-    # Add header as key/value pair to attachment part
-    part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {filename}",
-    )
-
-    message.attach(part) # attach attachment
-    """
-
     """ 
         Send the email
     """
