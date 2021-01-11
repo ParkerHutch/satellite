@@ -2,7 +2,7 @@ from picamera import PiCamera
 import subprocess
 from time import sleep
 
-mounted_cameras = {}
+devices = {}
 
 try:
     global camera
@@ -10,13 +10,19 @@ try:
 except:
     print('no official Raspberry Pi camera connected')
 
-def find_cameras():
-    global mounted_cameras 
-    mounted_cameras = {}
+
+def find_devices():
+    """Create a dictionary of device filepaths as keys and the corresponding 
+    number of cameras as values. Only devices that have 1 or more cameras are
+    stored. If the PiCamera is connected, it will not be included in this list.
+    """
+
+    global devices 
+    devices = {}
     for i in range(10):
         num_cameras = get_num_cameras(i)
         if num_cameras > 0:
-            mounted_cameras[f'/dev/video{i}'] = num_cameras
+            devices[f'/dev/video{i}'] = num_cameras
 
     
 
@@ -48,22 +54,39 @@ def get_num_cameras(mount_num: int) -> int:
         start = 'Available inputs:'
         end = 'No input was specified'
         first_run = (cmd_output.split(start)[1]).split(end)[0]
-        last_semicolon_index = first_run.rfind(':')
-        largest_device_index = int(first_run[last_semicolon_index - 1: last_semicolon_index])
+        last_colon_index = first_run.rfind(':')
+        largest_device_index = int(first_run[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
 def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
-    
+    """Take a picture using the given device, or on all connected devices, and
+    store the output in the given directory.
+
+    Args:
+        device (str, optional): The device to use to take pictures. Defaults to
+        'all'.
+        output_file_directory (str, optional): The relative filepath to store
+        output images in. Defaults to "./images/".
+    """
     if device == 'picamera':
         global camera
         print('taking picture with PiCamera') 
         camera.capture(output_file_directory + 'image.jpg')
     elif device == 'all':
-        find_cameras() # TODO maybe make sure this is only run once
         picture_num = 0 # TODO maybe generate random number if images already exist
-        for mount, cameras in mounted_cameras.items():
+
+        # Take a picture on the PiCamera
+        global camera
+        if camera is not None:
+            camera.capture(output_file_directory + 'image.jpg')
+            picture_num += 1
+        
+        # Take a picture on all connected USB cameras
+        find_devices() # TODO maybe make sure this is only run once
+        for mount, cameras in devices.items():
             for camera_number in range(cameras):
-                print(f'Taking picture on mount{mount} with camera{camera_number}')
+                print(f'Taking picture on mount{mount} with camera{camera_number}') # TODO add banners
+                # TODO route the output from below to a log file, then make sure it's not displayed in console
                 subprocess.run(['fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', '-q', output_file_directory + f'image{str(picture_num)}.jpg'])
                 picture_num += 1
     elif device.startswith('/dev/video'):
@@ -73,11 +96,13 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
 
 
 def stop():
+    """Close the PiCamera if it was initialized.
+    """
     global camera
     if camera is not None:
         camera.close()
 
 if __name__ == '__main__':
-    find_cameras()
-    print(mounted_cameras)
+    find_devices()
+    print(devices)
     stop()
