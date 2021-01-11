@@ -8,6 +8,7 @@ tuning_args = ['-r', '1280x720']
 processing_args = ['--banner-colour', '#FF0000', '--no-shadow', 
         '--font', 'sans:20',  
         '--no-subtitle', '--no-info']
+include_processing: bool = False
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
 # TODO separate args into tuning and output arrays that are combined
@@ -90,10 +91,12 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     # TODO add includeProcessing variable, only add title and processing if it's true
     args = ['fswebcam', '-q', '-d', device]
     args.extend(tuning_args)
-    args.extend(processing_args)
-    args.extend(['--title', f'DEVICE: {device}']) 
+    if include_processing:
+        args.extend(processing_args)
+        args.extend(['--title', f'DEVICE: {device}']) 
     args.extend([image_file_path + '.jpg'])
     return args
+
 def take_fswebcam_picture(device: str, log_file_path: str, 
                             image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
@@ -111,13 +114,6 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     f = open(log_file_path, 'a')
     f.write(f'Attempting to take a picture on the {device} device\n')
     f.flush()
-    """
-    args = ['fswebcam', '-q', '-d', device]
-    args.extend(tuning_args)
-    args.extend(processing_args)
-    args.extend(['--title', f'DEVICE: {device}']) # TODO add includeProcessing variable, only add title and processing if it's true
-    args.extend([image_file_path + '.jpg'])
-    """
     subprocess.run(get_fswebcam_capture_args(device, image_file_path), stdout=f, stderr=f)
 
     f.write('DONE\n')
