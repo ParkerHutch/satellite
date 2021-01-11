@@ -1,15 +1,39 @@
-import smtplib, ssl
 import json
-
+import smtplib
+import ssl
 from email import encoders
 from email.mime.base import MIMEBase
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from os import path, walk
 
 config_file = open('./config.json')
 config = json.load(config_file)
 
-def send_email(attachment_path): # TODO make attachments an array
+def get_attachment_paths(attachments_path):
+    paths = []
+    _, _, filenames = next(walk(attachments_path))
+    for filename in filenames:
+        paths.append(path.join(attachments_path, filename))
+    return paths
+
+def attach_file(message, attachment_path):
+    # Open the attachment in binary reading mode
+    with open(attachment_path, "rb") as attachment:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+
+    encoders.encode_base64(part) # Encode file in ASCII characters to send by email
+
+    # Add header as key/value pair to attachment part
+    part.add_header(
+        "Content-Disposition",
+        f"attachment; filename= {attachment_path}",
+    )
+
+    message.attach(part) # attach attachment
+
+def send_email(attachments_path): # TODO make attachments an array
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
@@ -24,23 +48,9 @@ def send_email(attachment_path): # TODO make attachments an array
 
     message.attach(html_obj)
 
-    filename = attachment_path#'images/image.jpg'
-
-    # Open the attachment in binary reading mode
-    with open(filename, "rb") as attachment:
-        part = MIMEBase("application", "octet-stream")
-        part.set_payload(attachment.read())
-
-    encoders.encode_base64(part) # Encode file in ASCII characters to send by email
-
-    # Add header as key/value pair to attachment part
-    part.add_header(
-        "Content-Disposition",
-        f"attachment; filename= {filename}",
-    )
-
-    message.attach(part) # attach attachment
-
+    for attachment_path in get_attachment_paths(attachments_path):
+        attach_file(message, attachment_path)
+    
     """ 
         Send the email
     """
