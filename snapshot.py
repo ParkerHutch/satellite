@@ -14,7 +14,7 @@ except:
 
 
 def find_devices(search_range: int = 10) -> dict[str, int]:
-    """Create a dictionary of device filepaths as keys and the corresponding 
+    """Return a dictionary of device filepaths as keys and the corresponding 
     number of cameras as values. Only devices that have 1 or more cameras are
     stored. If the PiCamera is connected, it will not be included in this list.
 
@@ -23,8 +23,9 @@ def find_devices(search_range: int = 10) -> dict[str, int]:
         to check. Defaults to 10.
 
     Returns:
-        dict[str, int]: A dictionary each key is a device and its corresponding
-        value is the number of cameras associated with it.
+        dict[str, int]: A dictionary where each key is a device and each key's 
+        corresponding value is the number of cameras associated with the 
+        device.
     """
 
     camera_devices = {}
@@ -54,8 +55,19 @@ def get_num_cameras(mount_num: int) -> int:
         /dev/video{mount_num}.
     """
 
-    cmd_output = subprocess.check_output(['script', '-q', '-c', f'(fswebcam --list-inputs -d /dev/video{mount_num})'], text=True)
-    error_messages = ['Unable to query input 0.', 'No such file or directory', 'Message from syslogd@raspberrypi']
+    # Run a command to check the device's inputs and store the output
+    cmd_output = subprocess.check_output(
+        [
+            'script', '-q', '-c', 
+            f'(fswebcam --list-inputs -d /dev/video{mount_num})'
+        ], 
+        text=True
+    )
+    error_messages = [
+        'Unable to query input 0.', 
+        'No such file or directory', 
+        'Message from syslogd@raspberrypi'
+    ]
     if any(message in cmd_output for message in error_messages):
         return 0
     else:
@@ -68,33 +80,34 @@ def get_num_cameras(mount_num: int) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
-def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
+def take_picture(camera_device: str = 'all', output_file_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
 
     Args:
-        device (str, optional): The device to use to take pictures. Defaults to
+        camera_device (str, optional): The device to use to take pictures. Defaults to
         'all'.
         output_file_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
-    if device == 'picamera':
+    if camera_device == 'picamera':
         camera.capture(output_file_directory + 'image.jpg')
-    elif device == 'all':
-        picture_num = 0 # TODO maybe generate random number if images already exist
+    elif camera_device == 'all':
+        # Take a picture on all connected USB cameras
+        
+        # TODO maybe generate random number if images already exist
+        picture_num = 0 
         # Take a picture on the PiCamera
         if camera is not None:
             camera.capture(output_file_directory + f'image{picture_num}.jpg')
             picture_num += 1
-        
-        # Take a picture on all connected USB cameras
+
         # Clear the camera_log.txt file if it exists
         open('./camera_log.txt', 'w').close()
 
         f = open('./camera_log.txt', 'a')
         for mount, cameras in find_devices().items(): # TODO rename mount variable
             for _ in range(cameras):
-                # TODO route the output from below to a log file, then make sure it's not displayed in console
                 f.write(f'Taking picture with device {mount}\n')
                 f.flush()
                 subprocess.run([
@@ -108,14 +121,13 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
                 f.flush()
                 picture_num += 1
         f.close()
-    elif device.startswith('/dev/video'):
+    elif camera_device.startswith('/dev/video'):
         subprocess.run([
-            'fswebcam', '-r', '1280x720', '-d', device, '--no-banner', '-q', 
+            'fswebcam', '-r', '1280x720', '-d', camera_device, '--no-banner', '-q', 
             output_file_directory + f'image.jpg'
         ])
     else:
-        print(f'device {device} is not supported')
-
+        print(f'device {camera_device} is not supported')
 
 def stop():
     """Close the PiCamera if it was initialized.
