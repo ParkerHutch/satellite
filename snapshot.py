@@ -8,6 +8,7 @@ try:
     global camera
     camera = PiCamera() # Make sure to close this on program end
 except:
+    camera = None
     print('no official Raspberry Pi camera connected')
 
 
