@@ -2,7 +2,6 @@ from picamera import PiCamera
 import subprocess
 from time import sleep
 
-devices = {}
 # TODO use -palette option with fswebcam to take jpeg pictures
 # TODO experiment with fswebcam flags for better pictures
 # TODO separate args into tuning and output arrays that are combined
@@ -14,7 +13,7 @@ except:
     print('no official Raspberry Pi camera connected')
 
 
-def find_devices(search_range: int = 10):
+def find_devices(search_range: int = 10) -> dict[str, int]:
     """Create a dictionary of device filepaths as keys and the corresponding 
     number of cameras as values. Only devices that have 1 or more cameras are
     stored. If the PiCamera is connected, it will not be included in this list.
@@ -22,9 +21,12 @@ def find_devices(search_range: int = 10):
     Args:
         search_range (int, optional): The number of /dev/video{number} devices
         to check. Defaults to 10.
+
+    Returns:
+        dict[str, int]: A dictionary each key is a device and its corresponding
+        value is the number of cameras associated with it.
     """
 
-    #global devices 
     camera_devices = {}
     for i in range(search_range):
         device_cameras = get_num_cameras(i)
@@ -86,8 +88,6 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
             picture_num += 1
         
         # Take a picture on all connected USB cameras
-        #find_devices() # TODO maybe make sure this is only run once
-
         # Clear the camera_log.txt file if it exists
         open('./camera_log.txt', 'w').close()
 
@@ -124,7 +124,6 @@ def stop():
         camera.close()
 
 if __name__ == '__main__':
-    found_devices = find_devices()
-    print('Devices found:')
-    print(found_devices)
+    print('Cameras found:')
+    print(find_devices())
     stop()
