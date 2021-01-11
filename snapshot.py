@@ -24,12 +24,14 @@ def find_devices(search_range: int = 10):
         to check. Defaults to 10.
     """
 
-    global devices 
-    devices = {}
+    #global devices 
+    camera_devices = {}
     for i in range(search_range):
         device_cameras = get_num_cameras(i)
         if device_cameras > 0:
-            devices[f'/dev/video{i}'] = device_cameras
+            camera_devices[f'/dev/video{i}'] = device_cameras
+    
+    return camera_devices
 
 def get_num_cameras(mount_num: int) -> int:
     """Get the number of cameras associated with the given video device. To 
@@ -84,13 +86,13 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
             picture_num += 1
         
         # Take a picture on all connected USB cameras
-        find_devices() # TODO maybe make sure this is only run once
+        #find_devices() # TODO maybe make sure this is only run once
 
         # Clear the camera_log.txt file if it exists
         open('./camera_log.txt', 'w').close()
 
         f = open('./camera_log.txt', 'a')
-        for mount, cameras in devices.items(): # TODO rename mount variable
+        for mount, cameras in find_devices().items(): # TODO rename mount variable
             for _ in range(cameras):
                 # TODO route the output from below to a log file, then make sure it's not displayed in console
                 f.write(f'Taking picture with device {mount}\n')
@@ -122,7 +124,7 @@ def stop():
         camera.close()
 
 if __name__ == '__main__':
-    find_devices()
+    found_devices = find_devices()
     print('Devices found:')
-    print(devices)
+    print(found_devices)
     stop()
