@@ -90,8 +90,9 @@ def take_picture(device: str = 'all', output_file_directory: str = "./images/"):
                     'fswebcam', '-r', '1280x720', '-d', mount, '--no-banner', 
                     '-q', 
                     output_file_directory + f'image{str(picture_num)}.jpg'
-                ], stdout='./blah.txt')
+                ], stdout=f)
                 picture_num += 1
+        f.close()
     elif device.startswith('/dev/video'):
         subprocess.run([
             'fswebcam', '-r', '1280x720', '-d', device, '--no-banner', '-q', 
