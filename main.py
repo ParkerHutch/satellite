@@ -43,7 +43,7 @@ def main():
 
         if not args.no_email:
             email_start = time.time()
-            email_handler.send_email('images/')
+            email_handler.send_email('images/', verbose=args.verbose)
             email_end = time.time()
             if args.verbose:
                 print(f'Sending email: \t\t{email_end - email_start} seconds')
