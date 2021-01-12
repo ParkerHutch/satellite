@@ -14,11 +14,15 @@ parser.add_argument('--no-email', help="don't email the images after capture", a
 parser.add_argument('-d', '--device',
                     help='which device to use for capturing photos (specify all to use all devices)', 
                     type=str, default='all')
+parser.add_argument('-l', '--list-devices',
+                    help='list all detected devices', action='store_true')
 
 def main():
     args = parser.parse_args()
     
-    print('args:', args)
+    if args.list_devices:
+        print('Connected devices:', snapshot.find_devices().keys())
+    
     capture_start = time.time()
     snapshot.capture(camera_device=args.device, 
                         add_processing=args.process_images, 
