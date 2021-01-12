@@ -181,6 +181,7 @@ def prepare_directory(images_directory_path: str):
     
 def capture(camera_device: str = 'all', 
             add_processing: bool = False,
+            verbose: bool = False,
             images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
@@ -197,7 +198,7 @@ def capture(camera_device: str = 'all',
     if camera_device == 'picamera':
         pi_camera.capture(images_directory + 'image.jpg')
     elif camera_device == 'all':
-        # Take a picture on all connected USB cameras
+        # Take a picture on all connected cameras
         
         picture_num = 0
 
@@ -212,17 +213,24 @@ def capture(camera_device: str = 'all',
 
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
+                if verbose:
+                    print(f'Attempting to capture image on device{device_path}')
                 take_fswebcam_picture(
                     device_path, 
                     add_processing,
                     log_file_path,
                     images_directory + f'image{str(picture_num)}'
                 )
+                print('DONE')
                 picture_num += 1
+        if verbose:
+            print('Camera Logs:')
+            with open(log_file_path, 'r') as log_file:
+                data = log_file.read()
+                print(data)
     elif camera_device.startswith('/dev/video'):
-        take_fswebcam_picture(camera_device, 
+        take_fswebcam_picture(camera_device, # TODO need to add output log file here
             add_processing,
-            log_file_path,
             images_directory + 'image.jpg')
     else:
         print(f'device {camera_device} is not supported')
