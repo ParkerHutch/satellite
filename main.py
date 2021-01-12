@@ -21,7 +21,11 @@ def main():
     args = parser.parse_args()
     
     if args.list_devices:
-        print('Connected devices:', snapshot.find_devices().keys())
+        print('Connected devices:')
+        print('Device Name\t\tCameras')
+        for device, cameras in snapshot.find_devices().items():
+            print(f'{device}\t\t{cameras}')
+        
     else:
         capture_start = time.time()
         snapshot.capture(camera_device=args.device, 

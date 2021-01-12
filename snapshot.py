@@ -226,6 +226,7 @@ def capture(camera_device: str = 'all',
             with open(log_file_path, 'r') as log_file:
                 data = log_file.read()
                 print(data)
+        # TODO delete log file at the end
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device, # TODO need to add output log file here
             add_processing,
