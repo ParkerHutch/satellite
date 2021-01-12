@@ -188,8 +188,8 @@ def capture(camera_device: str = 'all',
     log_file_path or deleted on function end if log_file_path is None.
 
     Args:
-        camera_device (str, optional): The device to use to take pictures. Defaults to
-        'all'.
+        camera_device (str, optional): The device to use to take pictures. 
+        Defaults to 'all'.
         images_directory (str, optional): The relative filepath to store
         output images in. Defaults to "./images/".
     """
