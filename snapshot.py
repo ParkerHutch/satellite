@@ -198,18 +198,15 @@ def capture(camera_device: str = 'all',
     log_file_path = './camera_log.txt'
     open(log_file_path, 'w').close()
 
-    if camera_device == 'picamera': # or 'all'
-        pi_camera.capture(images_directory + 'image.jpg') # TODO should check that pi_camera exists here
-    elif camera_device == 'all':
-        # Take a picture on all connected cameras
-        
-        picture_num = 0
-
-        # Take a picture on the PiCamera
+    picture_num = 0
+    if camera_device == 'picamera' or camera_device == 'all':
         if pi_camera is not None:
             pi_camera.capture(images_directory + f'image{picture_num}.jpg')
             picture_num += 1
-
+        elif camera_device == 'picamera':
+            print('PiCamera not connected') # TODO raise an exception here
+    elif camera_device == 'all':
+        # Take a picture on all connected cameras
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
                 take_fswebcam_picture(
@@ -219,7 +216,6 @@ def capture(camera_device: str = 'all',
                     images_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
-
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device,
             add_processing,
