@@ -195,7 +195,7 @@ def capture(camera_device: str = 'all',
     prepare_directory(images_directory)
 
     if camera_device == 'picamera':
-        pi_camera.capture(images_directory + 'image.jpg')
+        pi_camera.capture(images_directory + 'image.jpg') # TODO should check that pi_camera exists here
     elif camera_device == 'all':
         # Take a picture on all connected cameras
         
