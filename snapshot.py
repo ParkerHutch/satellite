@@ -17,8 +17,6 @@ processing_args = [
     '--no-shadow',
     '--no-subtitle', 
     '--no-info']
-# Whether to include the processing arguments when taking a photo with fswebcam
-#include_processing: bool = True 
 
 pi_camera = None
 try:
