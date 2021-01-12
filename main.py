@@ -16,8 +16,8 @@ parser.add_argument('-d', '--device',
                     type=str, default='all')
 parser.add_argument('-l', '--list-devices',
                     help='list all detected devices and quit', action='store_true')
-parser.add_argument('-k', '--keep-output', type=str, default=None,
-                        help='Retain log file instead of deleting it before program exit')
+parser.add_argument('-k', '--keep-output', type=str, default=None, metavar='FILE',
+                        help='retain a log file at the given file path')
 
 def main():
     args = parser.parse_args()
