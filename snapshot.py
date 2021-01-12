@@ -181,6 +181,7 @@ def capture(camera_device: str = 'all',
             add_processing: bool = False,
             verbose: bool = False,
             keep_output:bool = False,
+            log_file_path:str = './camera_logs.txt',
             images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
@@ -195,7 +196,6 @@ def capture(camera_device: str = 'all',
     prepare_directory(images_directory)
 
     # Clear the camera_log.txt file if it exists
-    log_file_path = './camera_log.txt'
     open(log_file_path, 'w').close()
 
     picture_num = 0

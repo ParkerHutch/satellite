@@ -16,7 +16,7 @@ parser.add_argument('-d', '--device',
                     type=str, default='all')
 parser.add_argument('-l', '--list-devices',
                     help='list all detected devices and quit', action='store_true')
-parser.add_argument('-k', '--keep-output', 
+parser.add_argument('-k', '--keep-output', type=str, default='camera_log.txt',
                         help='Retain log file instead of deleting it before program exit', 
                         action='store_true')
 
