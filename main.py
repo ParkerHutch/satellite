@@ -16,9 +16,8 @@ parser.add_argument('-d', '--device',
                     type=str, default='all')
 parser.add_argument('-l', '--list-devices',
                     help='list all detected devices and quit', action='store_true')
-parser.add_argument('-k', '--keep-output', type=str, default='camera_log.txt',
-                        help='Retain log file instead of deleting it before program exit', 
-                        action='store_true')
+parser.add_argument('-k', '--keep-output', type=str, default=None,
+                        help='Retain log file instead of deleting it before program exit')
 
 def main():
     args = parser.parse_args()
@@ -34,7 +33,8 @@ def main():
         snapshot.capture(camera_device=args.device, 
                             add_processing=args.process_images, 
                             verbose=args.verbose,
-                            keep_output=args.keep_output
+                            log_file_path=args.keep_output
+                            #keep_output=args.keep_output
         )
         capture_end = time.time()
         if args.verbose:

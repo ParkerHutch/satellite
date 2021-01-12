@@ -180,9 +180,8 @@ def prepare_directory(images_directory_path: str):
 def capture(camera_device: str = 'all', 
             add_processing: bool = False,
             verbose: bool = False,
-            keep_output:bool = False,
             log_file_path:str = './camera_logs.txt',
-            images_directory: str = "./images/"):
+            images_directory: str = './images/'):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
 
@@ -195,6 +194,9 @@ def capture(camera_device: str = 'all',
 
     prepare_directory(images_directory)
 
+    keep_output = (log_file_path is not None)
+    log_file_path = log_file_path if log_file_path else './camera_logs.txt'
+    
     # Clear the camera_log.txt file if it exists
     open(log_file_path, 'w').close()
 
