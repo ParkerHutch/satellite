@@ -10,14 +10,14 @@ parser.add_argument('-v', '--verbose',
                     help='show output when running the program', action='store_true')
 parser.add_argument('-p', '--process-images', 
                     help='add image processing to captured images', action='store_true')
-parser.add_argument('--no-email', help="don't email the images after capture", action='store_true')
+parser.add_argument('-n', '--no-email', help="don't email the images after capture", action='store_true')
 parser.add_argument('-d', '--device',
                     help="which device to use for capturing photos (specify 'all' to use all devices)", 
                     type=str, default='all')
 parser.add_argument('-l', '--list-devices',
                     help='list all detected devices and quit', action='store_true')
-parser.add_argument('-k', '--keep-output', type=str, default=None, metavar='FILE',
-                        help='retain a log file at the given file path')
+parser.add_argument('-o', '--output', type=str, default=None, metavar='FILE',
+                        help='output logs to the given file')
 
 def main():
     args = parser.parse_args()
