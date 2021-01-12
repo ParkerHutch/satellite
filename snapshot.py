@@ -207,7 +207,7 @@ def capture(camera_device: str = 'all',
             picture_num += 1
         elif camera_device == 'picamera':
             print('PiCamera not connected') # TODO raise an exception here
-    elif camera_device == 'all':
+    if camera_device == 'all':
         # Take a picture on all connected cameras
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
