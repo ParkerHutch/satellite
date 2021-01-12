@@ -20,7 +20,7 @@ processing_args = [
 
 pi_camera = None
 try:
-    pi_camera = PiCamera() # Make sure to close this on program end
+    pi_camera = PiCamera()
 except:
     print('no official Raspberry Pi camera connected')
 
@@ -183,7 +183,9 @@ def capture(camera_device: str = 'all',
             log_file_path:str = './camera_logs.txt',
             images_directory: str = './images/'):
     """Take a picture using the given device, or on all connected devices, and
-    store the output in the given directory.
+    store the output in the given directory. This function also generates a 
+    temporary output file, which will either be stored in the file given by
+    log_file_path or deleted on function end if log_file_path is None.
 
     Args:
         camera_device (str, optional): The device to use to take pictures. Defaults to

@@ -34,7 +34,6 @@ def main():
                             add_processing=args.process_images, 
                             verbose=args.verbose,
                             log_file_path=args.keep_output
-                            #keep_output=args.keep_output
         )
         capture_end = time.time()
         if args.verbose:
