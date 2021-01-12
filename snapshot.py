@@ -236,11 +236,3 @@ def stop():
     """
     if pi_camera is not None:
         pi_camera.close()
-
-if __name__ == '__main__':
-    print(f'Current time: {datetime.now().strftime("%m/%d/%Y %I:%M %p")}')
-    print('Clearing directory')
-    prepare_directory('./images/')
-    print('Cameras found:')
-    print(find_devices())
-    stop()
