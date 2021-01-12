@@ -18,7 +18,7 @@ processing_args = [
     '--no-subtitle', 
     '--no-info']
 # Whether to include the processing arguments when taking a photo with fswebcam
-include_processing: bool = True 
+#include_processing: bool = True 
 
 pi_camera = None
 try:
@@ -94,12 +94,14 @@ def get_num_cameras(mount_num: int) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
-def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
+def get_fswebcam_capture_args(device: str, 
+                                add_processing: bool, 
+                                image_file_path:str) -> List[str]:
     """Generates an array of arguments to add to the 'fswebcam' command to take 
     a picture on the given device and store it in the file given by 
     image_file_path. The capture_args array is used to supply arguments 
     associated with image capture, and the processing_args array is used,
-    if include_processing is True, to process the image after it is taken.  
+    if add_processing is True, to process the image after it is taken.  
 
     Args:
         device (str): The name of the device to use to take a picture, usually
@@ -112,7 +114,7 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     """
     args = ['fswebcam', '-q', '-d', device]
     args.extend(capture_args)
-    if include_processing:
+    if add_processing:
         args.extend(processing_args)
         timestamp_text = datetime.now().strftime('%m/%d/%Y %I:%M %p')
         args.extend([
@@ -124,7 +126,8 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     args.extend([image_file_path + '.jpg'])
     return args
 
-def take_fswebcam_picture(device: str, log_file_path: str, 
+def take_fswebcam_picture(device: str, add_processing: bool, 
+                            log_file_path: str, 
                             image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
     storing the image in the given image file path and appending the terminal
@@ -141,7 +144,8 @@ def take_fswebcam_picture(device: str, log_file_path: str,
     log_file = open(log_file_path, 'a')
     log_file.write(f'Attempting to take a picture on the {device} device\n')
     log_file.flush()
-    subprocess.run(get_fswebcam_capture_args(device, image_file_path), 
+    subprocess.run(get_fswebcam_capture_args(device, add_processing, 
+                                                image_file_path), 
                                                 stdout=log_file, 
                                                 stderr=log_file)
 
@@ -175,7 +179,9 @@ def prepare_directory(images_directory_path: str):
     else:
         print('Error: images directory is actually a file.') # TODO raise exception
     
-def take_picture(camera_device: str = 'all', images_directory: str = "./images/"):
+def capture(camera_device: str = 'all', 
+            add_processing: bool = False,
+            images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
 
@@ -208,12 +214,15 @@ def take_picture(camera_device: str = 'all', images_directory: str = "./images/"
             for _ in range(cameras):
                 take_fswebcam_picture(
                     device_path, 
+                    add_processing,
                     log_file_path,
                     images_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device, 
+            add_processing,
+            log_file_path,
             images_directory + 'image.jpg')
     else:
         print(f'device {camera_device} is not supported')
