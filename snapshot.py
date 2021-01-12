@@ -213,15 +213,14 @@ def capture(camera_device: str = 'all',
 
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
-                if verbose:
-                    print(f'Attempting to capture image on device{device_path}')
                 take_fswebcam_picture(
                     device_path, 
                     add_processing,
                     log_file_path,
                     images_directory + f'image{str(picture_num)}'
                 )
-                print('DONE')
+                if verbose:
+                    print(f'Attempted to capture image on device{device_path}')
                 picture_num += 1
         if verbose:
             print('Camera Logs:')

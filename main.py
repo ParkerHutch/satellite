@@ -16,7 +16,7 @@ def main():
     args = parser.parse_args()
     
     capture_start = time.time()
-    snapshot.capture(add_processing=args.process_images)
+    snapshot.capture(add_processing=args.process_images, verbose=args.verbose)
     capture_end = time.time()
     if args.verbose:
         print(f'Taking pictures: \t{capture_end-capture_start} seconds')
