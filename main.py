@@ -16,7 +16,9 @@ parser.add_argument('-d', '--device',
                     type=str, default='all')
 parser.add_argument('-l', '--list-devices',
                     help='list all detected devices and quit', action='store_true')
-
+parser.add_argument('-k', '--keep-output', 
+                        help='Retain log file instead of deleting it before program exit', 
+                        action='store_true')
 def main():
     args = parser.parse_args()
     
@@ -27,10 +29,13 @@ def main():
             print(f'{device}\t\t{cameras}')
         
     else:
+        # TODO make a global log file variable that all processes use to write to
         capture_start = time.time()
         snapshot.capture(camera_device=args.device, 
                             add_processing=args.process_images, 
-                            verbose=args.verbose)
+                            verbose=args.verbose,
+                            keep_output=args.keep_output
+        )
         capture_end = time.time()
         if args.verbose:
             print(f'Taking pictures: \t{capture_end-capture_start} seconds')

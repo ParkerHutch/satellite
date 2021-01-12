@@ -180,6 +180,7 @@ def prepare_directory(images_directory_path: str):
 def capture(camera_device: str = 'all', 
             add_processing: bool = False,
             verbose: bool = False,
+            keep_output:bool = False,
             images_directory: str = "./images/"):
     """Take a picture using the given device, or on all connected devices, and
     store the output in the given directory.
@@ -224,7 +225,8 @@ def capture(camera_device: str = 'all',
             with open(log_file_path, 'r') as log_file:
                 data = log_file.read()
                 print(data)
-        # TODO delete log file at the end
+        if not keep_output:
+            os.remove('./camera_log.txt')
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device, # TODO need to add output log file here
             add_processing,
