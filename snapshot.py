@@ -142,7 +142,7 @@ def take_fswebcam_picture(device: str, add_processing: bool,
     """
 
     log_file = open(log_file_path, 'a')
-    log_file.write(f'Attempting to take a picture on the {device} device\n')
+    log_file.write(f'Attempting to take a picture on the {device} device...')
     log_file.flush()
     subprocess.run(get_fswebcam_capture_args(device, add_processing, 
                                                 image_file_path), 
@@ -220,7 +220,7 @@ def capture(camera_device: str = 'all',
                     images_directory + f'image{str(picture_num)}'
                 )
                 picture_num += 1
-                
+
         if verbose:
             print('Camera Logs:')
             with open(log_file_path, 'r') as log_file:
