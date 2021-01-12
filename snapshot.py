@@ -219,9 +219,8 @@ def capture(camera_device: str = 'all',
                     log_file_path,
                     images_directory + f'image{str(picture_num)}'
                 )
-                if verbose:
-                    print(f'Attempted to capture image on device{device_path}')
                 picture_num += 1
+                
         if verbose:
             print('Camera Logs:')
             with open(log_file_path, 'r') as log_file:
