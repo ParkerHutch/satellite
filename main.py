@@ -6,7 +6,7 @@ import time
 start = time.time()
 snapshot.take_picture()
 end = time.time()
-print(f'timing took {start-end} seconds ')
+print(f'taking pictures took {end-start} seconds')
 snapshot.stop()
 
 email_handler.send_email('images/')
