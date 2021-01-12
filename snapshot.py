@@ -194,7 +194,11 @@ def capture(camera_device: str = 'all',
 
     prepare_directory(images_directory)
 
-    if camera_device == 'picamera':
+    # Clear the camera_log.txt file if it exists
+    log_file_path = './camera_log.txt'
+    open(log_file_path, 'w').close()
+
+    if camera_device == 'picamera': # or 'all'
         pi_camera.capture(images_directory + 'image.jpg') # TODO should check that pi_camera exists here
     elif camera_device == 'all':
         # Take a picture on all connected cameras
@@ -206,10 +210,6 @@ def capture(camera_device: str = 'all',
             pi_camera.capture(images_directory + f'image{picture_num}.jpg')
             picture_num += 1
 
-        # Clear the camera_log.txt file if it exists
-        log_file_path = './camera_log.txt'
-        open(log_file_path, 'w').close()
-
         for device_path, cameras in find_devices().items():
             for _ in range(cameras):
                 take_fswebcam_picture(
@@ -220,19 +220,20 @@ def capture(camera_device: str = 'all',
                 )
                 picture_num += 1
 
-        if verbose:
-            print('Camera Logs:')
-            with open(log_file_path, 'r') as log_file:
-                data = log_file.read()
-                print(data)
-        if not keep_output:
-            os.remove('./camera_log.txt')
     elif camera_device.startswith('/dev/video'):
-        take_fswebcam_picture(camera_device, # TODO need to add output log file here
+        take_fswebcam_picture(camera_device,
             add_processing,
+            log_file_path,
             images_directory + 'image.jpg')
     else:
         print(f'device {camera_device} is not supported')
+    
+    if verbose:
+        print('Camera Logs:')
+        with open(log_file_path, 'r') as log_file:
+            print(log_file.read())
+    if not keep_output:
+        os.remove(log_file_path)
 
 def stop():
     """Close the PiCamera if it was initialized.

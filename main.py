@@ -30,7 +30,6 @@ def main():
             print(f'{device}\t\t{cameras}')
         
     else:
-        # TODO make a global log file variable that all processes use to write to
         capture_start = time.time()
         snapshot.capture(camera_device=args.device, 
                             add_processing=args.process_images, 
