@@ -222,7 +222,7 @@ def capture(camera_device: str = 'all',
         take_fswebcam_picture(camera_device,
             add_processing,
             log_file_path,
-            images_directory + 'image.jpg')
+            images_directory + 'image')
     else:
         print(f'device {camera_device} is not supported')
     
