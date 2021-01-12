@@ -7,8 +7,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os import path, walk
 
-config_file = open('./config.json')
-config = json.load(config_file)
+#config_file = open('./config.json')
+with open('./config.json') as config_file:
+    config = json.load(config_file)
 
 def get_attachment_paths(attachments_path):
     paths = []
