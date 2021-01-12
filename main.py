@@ -11,12 +11,18 @@ parser.add_argument('-v', '--verbose',
 parser.add_argument('-p', '--process-images', 
                     help="add image processing to captured images", action='store_true')
 parser.add_argument('--no-email', help="don't email the images after capture", action='store_true')
+parser.add_argument('-d', '--device',
+                    help='which device to use for capturing photos (specify all to use all devices)', 
+                    type=str, default='all')
 
 def main():
     args = parser.parse_args()
     
+    print('args:', args)
     capture_start = time.time()
-    snapshot.capture(add_processing=args.process_images, verbose=args.verbose)
+    snapshot.capture(camera_device=args.device, 
+                        add_processing=args.process_images, 
+                        verbose=args.verbose)
     capture_end = time.time()
     if args.verbose:
         print(f'Taking pictures: \t{capture_end-capture_start} seconds')
