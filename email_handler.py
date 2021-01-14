@@ -9,7 +9,7 @@ from os import path, walk
 from typing import List
 
 
-def get_file_paths(folder_path: str) -> List[str]:
+def _get_file_paths(folder_path: str) -> List[str]:
     """Get the paths to all files in the folder given by the path 
     folder_path.
 
@@ -27,7 +27,7 @@ def get_file_paths(folder_path: str) -> List[str]:
         paths.append(path.join(folder_path, filename))
     return paths
 
-def attach_file(message: MIMEMultipart, attachment_path: str):
+def _attach_file(message: MIMEMultipart, attachment_path: str):
     """Attach the attachment with given file path to the given email message.
 
     Args:
@@ -87,8 +87,8 @@ def send_email(attachments_folder_path: str,
 
     message.attach(html_obj)
 
-    for attachment_path in get_file_paths(attachments_folder_path):
-        attach_file(message, attachment_path)
+    for attachment_path in _get_file_paths(attachments_folder_path):
+        _attach_file(message, attachment_path)
     
     """ 
         Send the email

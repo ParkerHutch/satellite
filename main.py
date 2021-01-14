@@ -1,7 +1,7 @@
 import argparse
 import time
 
-import email_handler
+from email_handler import send_email
 import snapshot
 
 
@@ -52,7 +52,7 @@ def main():
 
         if not args.no_email:
             email_start = time.time()
-            email_handler.send_email('images/', verbose=args.verbose)
+            send_email('images/', verbose=args.verbose)
             email_end = time.time()
             if args.verbose:
                 print(f'Sending email: \t\t{int(email_end - email_start)} seconds')
