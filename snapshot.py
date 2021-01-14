@@ -26,32 +26,33 @@ except:
 
 
 def find_devices(search_range: int = 10) -> Dict[str, int]:
-    """Return a dictionary of device filepaths as keys and the corresponding 
-    number of cameras as values. Only devices that have 1 or more cameras are
-    stored. If the PiCamera is connected, it will not be included in this list.
+    """Return a dictionary of device names as keys and the corresponding 
+    number of inputs (cameras) as values. Only devices that have 1 or more 
+    inputs are stored. If the PiCamera is connected, it will not be included in 
+    this list.
 
     Args:
         search_range (int, optional): The number of /dev/video{number} devices
         to check. Defaults to 10.
 
     Returns:
-        dict[str, int]: A dictionary where each key is a device and each key's 
-        corresponding value is the number of cameras associated with the 
+        dict[str, int]: A dictionary where each key is a device name and each 
+        key's corresponding value is the number of inputs associated with the 
         device.
     """
 
-    camera_devices = {} # TODO rename to inputs and this function to find_inputs
+    inputs = {}
     for i in range(search_range):
         device_name = f'/dev/video{i}'
-        device_cameras = get_num_cameras(device_name)
+        device_cameras = get_device_inputs(device_name)
         if device_cameras > 0:
-            camera_devices[device_name] = device_cameras 
+            inputs[device_name] = device_cameras 
     
-    return camera_devices
+    return inputs
 
-def get_num_cameras(device_name: str) -> int:
-    """Get the number of cameras associated with the given video device. To 
-    find the number of cameras, this function calls fswebcam with the
+def get_device_inputs(device_name: str) -> int:
+    """Get the number of inputs (cameras) associated with the given video
+    device. To find the number of inputs, this function calls fswebcam with the
     --list-inputs flag on the /dev/video{mount_num} device and parses the output
     to find the last input's associated number. For a mount with one camera, the
     parsed output will be '0:Camera 1'. This function interprets the number
@@ -63,7 +64,7 @@ def get_num_cameras(device_name: str) -> int:
         device_name (str): the name of the device to find associated inputs for.
 
     Returns:
-        int: The number of valid cameras connected to the device.
+        int: The number of valid inputs connected to the device.
     """
 
     # Run a command to check the device's inputs and capture the output
