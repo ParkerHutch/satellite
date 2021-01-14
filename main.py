@@ -53,7 +53,8 @@ def main():
         )
         capture_end = time.time()
         if args.verbose:
-            print(f'Taking pictures: \t{int(capture_end-capture_start)} seconds')
+            print(f'Taking pictures: \t{int(capture_end-capture_start)} \
+                    seconds')
         
 
         if not args.no_email:
@@ -61,7 +62,8 @@ def main():
             send_email('images/', verbose=args.verbose)
             email_end = time.time()
             if args.verbose:
-                print(f'Sending email: \t\t{int(email_end - email_start)} seconds')
+                print(f'Sending email: \t\t{int(email_end - email_start)} \
+                        seconds')
         
         snapshot.close_camera()
 
