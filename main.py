@@ -22,11 +22,10 @@ parser.add_argument('-o', '--output', type=str, default=None, metavar='FILE',
 def main():
     args = parser.parse_args()
     
-    if args.list_devices: # TODO fix this formatting
-        print('Connected Devices'.center(31, '-'))
-        print('Device Name\t\tCameras')
+    if args.list_devices:
+        print('Device: Input Count')
         for device, cameras in snapshot.find_devices().items():
-            print(f'{device}\t\t{cameras}')
+            print(f'{device}:{cameras}')
         
     else:
         capture_start = time.time()
