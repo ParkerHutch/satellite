@@ -8,6 +8,7 @@ from email.mime.text import MIMEText
 from os import path, walk
 from typing import List
 
+
 def get_file_paths(folder_path: str) -> List[str]:
     """Get the paths to all files in the folder given by the path 
     folder_path.
@@ -73,7 +74,7 @@ def send_email(attachments_folder_path: str,
         config = json.load(config_file)
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Email from Python"
+    message["Subject"] = "Satellite Email"
     message["From"] = config['sender']['username']
     message["To"] = config['recipient']['username']
 
