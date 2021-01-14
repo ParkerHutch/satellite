@@ -31,13 +31,13 @@ def find_devices(search_range: int = 10) -> Dict[str, int]:
     inputs are stored.
 
     Args:
-        search_range (int, optional): The number of /dev/video{number} devices
+        search_range (int, optional): the number of /dev/video{number} devices
         to check. Defaults to 10.
 
     Returns:
-        dict[str, int]: A dictionary where each key is a device name and each 
+        dict[str, int]: a dictionary where each key is a device name and each 
         key's corresponding value is the number of inputs associated with the 
-        device.
+        device
     """
 
     inputs = {}
@@ -63,10 +63,10 @@ def get_device_inputs(device_name: str) -> int:
     this index and 0, and including 0.
 
     Args:
-        device_name (str): the name of the device to find associated inputs for.
+        device_name (str): the name of the device to find associated inputs for
 
     Returns:
-        int: The number of valid inputs connected to the device.
+        int: the number of valid inputs connected to the device
     """
 
     # Run a command to check the device's inputs and capture the output
@@ -104,16 +104,16 @@ def _get_fswebcam_capture_args(device: str,
     if add_processing is True, to process the image after it is taken.  
 
     Args:
-        device (str): The name of the device to use to take a picture. An 
-        example value could be /dev/video0.
-        add_processing (bool): Whether to add image processing effects to photos 
-        after capture.
-        image_file_path (str): The path and filename of the file to store the
-        captured image in.
+        device (str): the name of the device to use to take a picture, for
+        example /dev/video0
+        add_processing (bool): whether to add image processing effects to photos 
+        after capture
+        image_file_path (str): the path and filename of the file to store the
+        captured image in
 
     Returns:
         List[str]: a list of arguments to use in conjuction with the fswebcam
-        command.
+        command
     """
     args = ['fswebcam', '-q', '-d', device]
     args.extend(CAPTURE_ARGS)
@@ -136,12 +136,12 @@ def _take_fswebcam_picture(device: str, add_processing: bool,
     output to the log file given by the log file path.
 
     Args:
-        device (str): The device to use to take a picture.
-        add_processing (bool): Whether to add image processing effects to photos 
-        after capture.
-        log_file_path (str): The path to the file to append logs to. 
-        image_file_path (str): The path and filename of the file to store the
-        captured image in.
+        device (str): the device to use to take a picture
+        add_processing (bool): whether to add image processing effects to photos 
+        after capture
+        log_file_path (str): the path to the file to append logs to 
+        image_file_path (str): the path and filename of the file to store the
+        captured image in
     """
 
     log_file = open(log_file_path, 'a')
@@ -164,7 +164,7 @@ def _prepare_directory(images_directory_path: str):
     raised.
 
     Args:
-        images_directory_path (str): The path to the folder that should be 
+        images_directory_path (str): the path to the folder that should be 
         prepared to hold images
     """
 
@@ -191,16 +191,16 @@ def capture(camera_device: str = 'all', add_processing: bool = False,
     log_file_path or deleted on function end if log_file_path is None.
 
     Args:
-        camera_device (str, optional): The device to use to take a photo. If 
+        camera_device (str, optional): the device to use to take a photo. If 
         'all' is specified, all detected devices will be used to capture photos. 
         Defaults to 'all'.
-        add_processing (bool, optional): Whether to add image processing effects
+        add_processing (bool, optional): whether to add image processing effects
         to photos after capture. Defaults to False.
-        verbose (bool, optional): Whether to show verbose output on stdout. 
+        verbose (bool, optional): whether to show verbose output on stdout. 
         Defaults to False.
-        log_file_path (str, optional): The path to the file to store logs in. 
+        log_file_path (str, optional): the path to the file to store logs in. 
         Defaults to './camera_logs.txt'.
-        images_directory (str, optional): The path to the folder to store
+        images_directory (str, optional): the path to the folder to store
         captured images in. Defaults to './images/'.
     """
 

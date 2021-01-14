@@ -6,6 +6,12 @@ from snapshot import capture, close_camera, find_devices
 
 
 def get_parser() -> argparse.ArgumentParser:
+    """Build an ArgumentParser to handle various command line arguments.
+
+    Returns:
+        argparse.ArgumentParser: an ArgumentParser to handle command line 
+        arguments
+    """
     parser = argparse.ArgumentParser(
         description='Use a device to capture and send photos')
     parser.add_argument('-v', '--verbose', 
