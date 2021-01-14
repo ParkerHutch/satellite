@@ -29,7 +29,14 @@ def get_file_paths(folder_path: str) -> List[str]:
         paths.append(path.join(folder_path, filename))
     return paths
 
-def attach_file(message, attachment_path):
+def attach_file(message: MIMEMultipart, attachment_path: str):
+    """Attach the attachment with given file path to the given email message.
+
+    Args:
+        message (MIMEMultipart): the email message to add an attachment to
+        attachment_path (str): the path to the attachment file
+    """
+
     # Open the attachment in binary reading mode
     with open(attachment_path, "rb") as attachment:
         part = MIMEBase("application", "octet-stream")
