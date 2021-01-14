@@ -16,43 +16,44 @@ processing_args = [
     '--font', 'sans:20',
     '--no-shadow',
     '--no-subtitle', 
-    '--no-info']
-# Whether to include the processing arguments when taking a photo with fswebcam
-include_processing: bool = True 
+    '--no-info'
+]
 
 pi_camera = None
 try:
-    pi_camera = PiCamera() # Make sure to close this on program end
-except:
-    print('no official Raspberry Pi camera connected')
-
+    pi_camera = PiCamera()
 
 def find_devices(search_range: int = 10) -> Dict[str, int]:
-    """Return a dictionary of device filepaths as keys and the corresponding 
-    number of cameras as values. Only devices that have 1 or more cameras are
-    stored. If the PiCamera is connected, it will not be included in this list.
+    """Return a dictionary of device names as keys and the corresponding 
+    number of inputs (cameras) as values. Only devices that have 1 or more 
+    inputs are stored. If the PiCamera is connected, it will not be included in 
+    this list.
 
     Args:
         search_range (int, optional): The number of /dev/video{number} devices
         to check. Defaults to 10.
 
     Returns:
-        dict[str, int]: A dictionary where each key is a device and each key's 
-        corresponding value is the number of cameras associated with the 
+        dict[str, int]: A dictionary where each key is a device name and each 
+        key's corresponding value is the number of inputs associated with the 
         device.
     """
 
-    camera_devices = {}
+    inputs = {}
     for i in range(search_range):
-        device_cameras = get_num_cameras(i)
+        device_name = f'/dev/video{i}'
+        device_cameras = get_device_inputs(device_name)
         if device_cameras > 0:
-            camera_devices[f'/dev/video{i}'] = device_cameras
+            inputs[device_name] = device_cameras 
     
-    return camera_devices
+    if pi_camera is not None:
+        inputs['RPi Camera Module'] = 1
 
-def get_num_cameras(mount_num: int) -> int:
-    """Get the number of cameras associated with the given video device. To 
-    find the number of cameras, this function calls fswebcam with the
+    return inputs
+
+def get_device_inputs(device_name: str) -> int:
+    """Get the number of inputs (cameras) associated with the given video
+    device. To find the number of inputs, this function calls fswebcam with the
     --list-inputs flag on the /dev/video{mount_num} device and parses the output
     to find the last input's associated number. For a mount with one camera, the
     parsed output will be '0:Camera 1'. This function interprets the number
@@ -61,19 +62,17 @@ def get_num_cameras(mount_num: int) -> int:
     this index and 0, and including 0.
 
     Args:
-        mount_num (int): the postfix to the /dev/video path to check for 
-        cameras on
+        device_name (str): the name of the device to find associated inputs for.
 
     Returns:
-        int: The number of valid cameras connected to the mount 
-        /dev/video{mount_num}.
+        int: The number of valid inputs connected to the device.
     """
 
     # Run a command to check the device's inputs and capture the output
     cmd_output = subprocess.check_output(
         [
             'script', '-q', '-c', 
-            f'(fswebcam --list-inputs -d /dev/video{mount_num})', 
+            f'(fswebcam --list-inputs -d {device_name})', 
             '/dev/null'
         ], 
         text=True
@@ -94,17 +93,22 @@ def get_num_cameras(mount_num: int) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
-def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
+def get_fswebcam_capture_args(device: str, 
+                                add_processing: bool, 
+                                image_file_path:str) -> List[str]:
     """Generates an array of arguments to add to the 'fswebcam' command to take 
     a picture on the given device and store it in the file given by 
     image_file_path. The capture_args array is used to supply arguments 
     associated with image capture, and the processing_args array is used,
-    if include_processing is True, to process the image after it is taken.  
+    if add_processing is True, to process the image after it is taken.  
 
     Args:
-        device (str): The name of the device to use to take a picture, usually
-        begins with /dev/video.
-        image_file_path (str): The path to the file to store the image in.
+        device (str): The name of the device to use to take a picture. An 
+        example value could be /dev/video0.
+        add_processing (bool): Whether to add image processing effects to photos 
+        after capture.
+        image_file_path (str): The path and filename of the file to store the
+        captured image in.
 
     Returns:
         List[str]: a list of arguments to use in conjuction with the fswebcam
@@ -112,7 +116,7 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     """
     args = ['fswebcam', '-q', '-d', device]
     args.extend(capture_args)
-    if include_processing:
+    if add_processing:
         args.extend(processing_args)
         timestamp_text = datetime.now().strftime('%m/%d/%Y %I:%M %p')
         args.extend([
@@ -124,24 +128,26 @@ def get_fswebcam_capture_args(device: str, image_file_path:str) -> List[str]:
     args.extend([image_file_path + '.jpg'])
     return args
 
-def take_fswebcam_picture(device: str, log_file_path: str, 
+def take_fswebcam_picture(device: str, add_processing: bool, log_file_path: str, 
                             image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
     storing the image in the given image file path and appending the terminal
     output to the log file given by the log file path.
 
     Args:
-        device (str): The device to use to take a picture. Usually begins with
-        /dev/video.
-        log_file_path (str): The path to the file where command line output 
-        should be appended.
-        image_file_path (str): The output image's file path and name
+        device (str): The device to use to take a picture.
+        add_processing (bool): Whether to add image processing effects to photos 
+        after capture.
+        log_file_path (str): The path to the file to append logs to. 
+        image_file_path (str): The path and filename of the file to store the
+        captured image in.
     """
 
     log_file = open(log_file_path, 'a')
-    log_file.write(f'Attempting to take a picture on the {device} device\n')
+    log_file.write(f'Attempting to take a picture on the {device} device...')
     log_file.flush()
-    subprocess.run(get_fswebcam_capture_args(device, image_file_path), 
+    subprocess.run(get_fswebcam_capture_args(device, add_processing, 
+                                                image_file_path), 
                                                 stdout=log_file, 
                                                 stderr=log_file)
 
@@ -175,59 +181,67 @@ def prepare_directory(images_directory_path: str):
     else:
         print('Error: images directory is actually a file.') # TODO raise exception
     
-def take_picture(camera_device: str = 'all', images_directory: str = "./images/"):
+def capture(camera_device: str = 'all', add_processing: bool = False,
+            verbose: bool = False, log_file_path:str = './camera_logs.txt',
+            images_directory: str = './images/'):
     """Take a picture using the given device, or on all connected devices, and
-    store the output in the given directory.
+    stores the output in the given directory. This function also generates a 
+    temporary output file, which will either be stored in the file given by
+    log_file_path or deleted on function end if log_file_path is None.
 
     Args:
-        camera_device (str, optional): The device to use to take pictures. Defaults to
-        'all'.
-        images_directory (str, optional): The relative filepath to store
-        output images in. Defaults to "./images/".
+        camera_device (str, optional): The device to use to take a photo. If 
+        'all' is specified, all detected devices will be used to capture photos. 
+        Defaults to 'all'.
+        add_processing (bool, optional): Whether to add image processing effects
+        to photos after capture. Defaults to False.
+        verbose (bool, optional): Whether to show verbose output on stdout. 
+        Defaults to False.
+        log_file_path (str, optional): The path to the file to store logs in. 
+        Defaults to './camera_logs.txt'.
+        images_directory (str, optional): The path to the folder to store
+        captured images in. Defaults to './images/'.
     """
 
     prepare_directory(images_directory)
 
-    if camera_device == 'picamera':
-        pi_camera.capture(images_directory + 'image.jpg')
-    elif camera_device == 'all':
-        # Take a picture on all connected USB cameras
-        
-        picture_num = 0
+    keep_output = log_file_path is not None
+    log_file_path = log_file_path if log_file_path else './camera_logs.txt'
+    
+    # Clear the camera_log.txt file if it exists
+    open(log_file_path, 'w').close()
 
-        # Take a picture on the PiCamera
+    picture_num = 0
+    if camera_device == 'picamera' or camera_device == 'all':
         if pi_camera is not None:
             pi_camera.capture(images_directory + f'image{picture_num}.jpg')
             picture_num += 1
-
-        # Clear the camera_log.txt file if it exists
-        log_file_path = './camera_log.txt'
-        open(log_file_path, 'w').close()
-
-        for device_path, cameras in find_devices().items():
-            for _ in range(cameras):
-                take_fswebcam_picture(
-                    device_path, 
-                    log_file_path,
-                    images_directory + f'image{str(picture_num)}'
-                )
-                picture_num += 1
+        elif camera_device == 'picamera':
+            print('PiCamera not connected') # TODO raise an exception here
+    if camera_device == 'all':
+        # Take a picture on all connected cameras, excluding the PiCamera
+        for device_name, cameras in find_devices().items():
+            if device_name != 'RPi Camera Module':
+                for _ in range(cameras):
+                    take_fswebcam_picture(
+                        device_name, add_processing, log_file_path,
+                        images_directory + f'image{str(picture_num)}')
+                    picture_num += 1
     elif camera_device.startswith('/dev/video'):
-        take_fswebcam_picture(camera_device, 
-            images_directory + 'image.jpg')
+        take_fswebcam_picture(
+            camera_device, add_processing, log_file_path, 
+            images_directory + 'image')
     else:
         print(f'device {camera_device} is not supported')
+    
+    if verbose:
+        print('Camera Logs:')
+        with open(log_file_path, 'r') as log_file:
+            print(log_file.read())
+    if not keep_output:
+        os.remove(log_file_path)
 
 def stop():
-    """Close the PiCamera if it was initialized.
-    """
+    """Close the PiCamera if it was initialized."""
     if pi_camera is not None:
         pi_camera.close()
-
-if __name__ == '__main__':
-    print(f'Current time: {datetime.now().strftime("%m/%d/%Y %I:%M %p")}')
-    print('Clearing directory')
-    prepare_directory('./images/')
-    print('Cameras found:')
-    print(find_devices())
-    stop()

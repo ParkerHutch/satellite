@@ -7,8 +7,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os import path, walk
 
-config_file = open('./config.json')
-config = json.load(config_file)
+with open('./config.json', 'r') as config_file:
+    config = json.load(config_file)
 
 def get_attachment_paths(attachments_path):
     paths = []
@@ -33,7 +33,7 @@ def attach_file(message, attachment_path):
 
     message.attach(part) # attach attachment
 
-def send_email(attachments_path): # TODO make attachments an array
+def send_email(attachments_path, verbose:bool = False):
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
@@ -60,10 +60,13 @@ def send_email(attachments_path): # TODO make attachments an array
     ) as server:
         try:
             server.login(config['sender']['username'], config['sender']['password'])
+            if verbose:
+                print('Logged into the email server')
             try:
                 server.sendmail(
                     config['sender']['username'], config['recipient']['username'], message.as_string())
-                print("Sent the email")
+                if verbose:
+                    print("Sent the email")
             except smtplib.SMTPException as err:
                 print('An error occurred while sending the email: \n', err)
         except smtplib.SMTPException as err:
