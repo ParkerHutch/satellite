@@ -28,8 +28,7 @@ except:
 def find_devices(search_range: int = 10) -> Dict[str, int]:
     """Return a dictionary of device names as keys and the corresponding 
     number of inputs (cameras) as values. Only devices that have 1 or more 
-    inputs are stored. If the PiCamera is connected, it will not be included in 
-    this list.
+    inputs are stored.
 
     Args:
         search_range (int, optional): The number of /dev/video{number} devices
