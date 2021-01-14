@@ -22,7 +22,7 @@ parser.add_argument('-o', '--output', type=str, default=None, metavar='FILE',
 def main():
     args = parser.parse_args()
     
-    if args.list_devices:
+    if args.list_devices: # TODO fix this formatting
         print('Connected Devices'.center(31, '-'))
         print('Device Name\t\tCameras')
         for device, cameras in snapshot.find_devices().items():

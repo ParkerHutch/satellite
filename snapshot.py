@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime
 from typing import Dict, List
 import os
-# TODO fix documentation
+
 """ 
     fswebcam arguments for image capture and processing
 """
@@ -22,7 +22,7 @@ pi_camera = None
 try:
     pi_camera = PiCamera()
 except:
-    print('no official Raspberry Pi camera connected')
+    print('No official Raspberry Pi Camera Module detected') # TODO don't need to print this
 
 
 def find_devices(search_range: int = 10) -> Dict[str, int]:
