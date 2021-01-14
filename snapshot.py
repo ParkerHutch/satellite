@@ -48,6 +48,9 @@ def find_devices(search_range: int = 10) -> Dict[str, int]:
         if device_cameras > 0:
             inputs[device_name] = device_cameras 
     
+    if pi_camera is not None:
+        inputs['RPi Camera Module'] = 1
+
     return inputs
 
 def get_device_inputs(device_name: str) -> int:
@@ -221,16 +224,17 @@ def capture(camera_device: str = 'all',
         elif camera_device == 'picamera':
             print('PiCamera not connected') # TODO raise an exception here
     if camera_device == 'all':
-        # Take a picture on all connected cameras
-        for device_path, cameras in find_devices().items():
-            for _ in range(cameras):
-                take_fswebcam_picture(
-                    device_path, 
-                    add_processing,
-                    log_file_path,
-                    images_directory + f'image{str(picture_num)}'
-                )
-                picture_num += 1
+        # Take a picture on all connected cameras, excluding the PiCamera
+        for device_name, cameras in find_devices().items():
+            if device_name is not 'picamera':
+                for _ in range(cameras):
+                    take_fswebcam_picture(
+                        device_name, 
+                        add_processing,
+                        log_file_path,
+                        images_directory + f'image{str(picture_num)}'
+                    )
+                    picture_num += 1
     elif camera_device.startswith('/dev/video'):
         take_fswebcam_picture(camera_device,
             add_processing,
