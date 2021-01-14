@@ -53,7 +53,10 @@ def attach_file(message: MIMEMultipart, attachment_path: str):
 
     message.attach(part) # attach attachment
 
-def send_email(attachments_folder_path, verbose:bool = False):
+def send_email(attachments_folder_path, 
+                html_message_path: str = './email-message.html', 
+                verbose:bool = False):
+    
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
@@ -62,7 +65,7 @@ def send_email(attachments_folder_path, verbose:bool = False):
     """
         Create the HTML part of the message
     """
-    html = open('email-message.html', 'r').read()
+    html = open(html_message_path, 'r').read()
 
     html_obj = MIMEText(html, "html")
 
