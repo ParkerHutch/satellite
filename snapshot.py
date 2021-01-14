@@ -1,18 +1,18 @@
 import os
 import subprocess
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, Final, List
 
 from picamera import PiCamera
 
 """ 
     fswebcam arguments for image capture and processing
 """
-capture_args = [
+CAPTURE_ARGS: Final[List[str]] = [
     '--resolution', '1280x720',
     '--delay', '1'
 ]
-processing_args = [
+PROCESSING_ARGS: Final[List[str]] = [
     '--banner-colour', '#FF0000', 
     '--font', 'sans:20',
     '--no-shadow',
@@ -96,7 +96,7 @@ def get_device_inputs(device_name: str) -> int:
             inputs_found[last_colon_index - 1: last_colon_index])
         return largest_device_index + 1
 
-def get_fswebcam_capture_args(device: str, 
+def _get_fswebcam_capture_args(device: str, 
                                 add_processing: bool, 
                                 image_file_path:str) -> List[str]:
     """Generates an array of arguments to add to the 'fswebcam' command to take 
@@ -118,9 +118,9 @@ def get_fswebcam_capture_args(device: str,
         command.
     """
     args = ['fswebcam', '-q', '-d', device]
-    args.extend(capture_args)
+    args.extend(CAPTURE_ARGS)
     if add_processing:
-        args.extend(processing_args)
+        args.extend(PROCESSING_ARGS)
         timestamp_text = datetime.now().strftime('%m/%d/%Y %I:%M %p')
         args.extend([
             '--title', f'DEVICE: {device}',
@@ -131,8 +131,8 @@ def get_fswebcam_capture_args(device: str,
     args.extend([image_file_path + '.jpg'])
     return args
 
-def take_fswebcam_picture(device: str, add_processing: bool, log_file_path: str, 
-                            image_file_path: str):
+def _take_fswebcam_picture(device: str, add_processing: bool, 
+                            log_file_path: str, image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
     storing the image in the given image file path and appending the terminal
     output to the log file given by the log file path.
@@ -149,7 +149,7 @@ def take_fswebcam_picture(device: str, add_processing: bool, log_file_path: str,
     log_file = open(log_file_path, 'a')
     log_file.write(f'Attempting to take a picture on the {device} device...')
     log_file.flush()
-    subprocess.run(get_fswebcam_capture_args(device, add_processing, 
+    subprocess.run(_get_fswebcam_capture_args(device, add_processing, 
                                                 image_file_path), 
                                                 stdout=log_file, 
                                                 stderr=log_file)
@@ -158,7 +158,7 @@ def take_fswebcam_picture(device: str, add_processing: bool, log_file_path: str,
     log_file.flush()
     log_file.close()
 
-def prepare_directory(images_directory_path: str): 
+def _prepare_directory(images_directory_path: str): 
     """Sets up the directory with given path so that it can hold incoming
     images. If the folder exists, any file with a image extension (see
     img_extensions array) or 'image' prefix is removed. If the folder doesn't
@@ -206,7 +206,7 @@ def capture(camera_device: str = 'all', add_processing: bool = False,
         captured images in. Defaults to './images/'.
     """
 
-    prepare_directory(images_directory)
+    _prepare_directory(images_directory)
 
     keep_output = log_file_path is not None
     log_file_path = log_file_path if log_file_path else './camera_logs.txt'
@@ -226,12 +226,12 @@ def capture(camera_device: str = 'all', add_processing: bool = False,
         for device_name, cameras in find_devices().items():
             if device_name != 'RPi Camera Module':
                 for _ in range(cameras):
-                    take_fswebcam_picture(
+                    _take_fswebcam_picture(
                         device_name, add_processing, log_file_path,
                         images_directory + f'image{str(picture_num)}')
                     picture_num += 1
     elif camera_device.startswith('/dev/video'):
-        take_fswebcam_picture(
+        _take_fswebcam_picture(
             camera_device, add_processing, log_file_path, 
             images_directory + 'image')
     else:
