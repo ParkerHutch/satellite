@@ -8,9 +8,6 @@ from email.mime.text import MIMEText
 from os import path, walk
 from typing import List
 
-with open('./config.json', 'r') as config_file:
-    config = json.load(config_file)
-
 def get_file_paths(folder_path: str) -> List[str]:
     """Get the paths to all files in the folder given by the path 
     folder_path.
@@ -55,8 +52,12 @@ def attach_file(message: MIMEMultipart, attachment_path: str):
 
 def send_email(attachments_folder_path, 
                 html_message_path: str = './email-message.html', 
+                config_path: str = './config.json',
                 verbose:bool = False):
     
+    with open(config_path, 'r') as config_file:
+        config = json.load(config_file)
+
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
