@@ -1,8 +1,9 @@
-from picamera import PiCamera
+import os
 import subprocess
 from datetime import datetime
 from typing import Dict, List
-import os
+
+from picamera import PiCamera
 
 """ 
     fswebcam arguments for image capture and processing

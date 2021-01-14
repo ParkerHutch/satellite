@@ -1,7 +1,9 @@
-import time
 import argparse
-import snapshot
+import time
+
 import email_handler
+import snapshot
+
 
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
