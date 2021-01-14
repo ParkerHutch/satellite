@@ -40,15 +40,16 @@ def find_devices(search_range: int = 10) -> Dict[str, int]:
         device.
     """
 
-    camera_devices = {}
+    camera_devices = {} # TODO rename to inputs and this function to find_inputs
     for i in range(search_range):
-        device_cameras = get_num_cameras(i)
+        device_name = f'/dev/video{i}'
+        device_cameras = get_num_cameras(device_name)
         if device_cameras > 0:
-            camera_devices[f'/dev/video{i}'] = device_cameras
+            camera_devices[device_name] = device_cameras 
     
     return camera_devices
 
-def get_num_cameras(mount_num: int) -> int:
+def get_num_cameras(device_name: str) -> int:
     """Get the number of cameras associated with the given video device. To 
     find the number of cameras, this function calls fswebcam with the
     --list-inputs flag on the /dev/video{mount_num} device and parses the output
@@ -59,19 +60,17 @@ def get_num_cameras(mount_num: int) -> int:
     this index and 0, and including 0.
 
     Args:
-        mount_num (int): the postfix to the /dev/video path to check for 
-        cameras on
+        device_name (str): the name of the device to find associated inputs for.
 
     Returns:
-        int: The number of valid cameras connected to the mount 
-        /dev/video{mount_num}.
+        int: The number of valid cameras connected to the device.
     """
 
     # Run a command to check the device's inputs and capture the output
     cmd_output = subprocess.check_output(
         [
             'script', '-q', '-c', 
-            f'(fswebcam --list-inputs -d /dev/video{mount_num})', 
+            f'(fswebcam --list-inputs -d {device_name})', 
             '/dev/null'
         ], 
         text=True
