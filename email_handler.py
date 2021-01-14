@@ -50,11 +50,25 @@ def attach_file(message: MIMEMultipart, attachment_path: str):
 
     message.attach(part) # attach attachment
 
-def send_email(attachments_folder_path, 
+def send_email(attachments_folder_path: str, 
                 html_message_path: str = './email-message.html', 
                 config_path: str = './config.json',
                 verbose:bool = False):
-    
+    """Use the config file to send an email containing the given message and
+    attachments to a recipient, also defined in the config file.
+
+    Args:
+        attachments_folder_path (str): the path to the folder containing files
+        to be attached
+        html_message_path (str, optional): the path to the message's HTML 
+        content. Defaults to './email-message.html'.
+        config_path (str, optional): the path to the config file to draw sender,
+        receiver, and email server information from. Defaults to 
+        './config.json'.
+        verbose (bool, optional): whether to output information to stdout while
+        emailing the message. Defaults to False.
+    """
+
     with open(config_path, 'r') as config_file:
         config = json.load(config_file)
 
