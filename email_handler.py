@@ -6,15 +6,27 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os import path, walk
+from typing import List
 
 with open('./config.json', 'r') as config_file:
     config = json.load(config_file)
 
-def get_attachment_paths(attachments_path):
+def get_file_paths(folder_path: str) -> List[str]:
+    """Get the paths to all files in the folder given by the path 
+    folder_path.
+
+    Args:
+        folder_path (str): the path to the folder containing files
+
+    Returns:
+        List[str]: a list of filepaths as strings corresponding to files in the 
+        given folder
+    """
+
     paths = []
-    _, _, filenames = next(walk(attachments_path))
+    _, _, filenames = next(walk(folder_path))
     for filename in filenames:
-        paths.append(path.join(attachments_path, filename))
+        paths.append(path.join(folder_path, filename))
     return paths
 
 def attach_file(message, attachment_path):
@@ -34,7 +46,7 @@ def attach_file(message, attachment_path):
 
     message.attach(part) # attach attachment
 
-def send_email(attachments_path, verbose:bool = False):
+def send_email(attachments_folder_path, verbose:bool = False):
     message = MIMEMultipart("alternative")
     message["Subject"] = "Email from Python"
     message["From"] = config['sender']['username']
@@ -43,13 +55,13 @@ def send_email(attachments_path, verbose:bool = False):
     """
         Create the HTML part of the message
     """
-    html = open('message.html', 'r').read()
+    html = open('email-message.html', 'r').read()
 
     html_obj = MIMEText(html, "html")
 
     message.attach(html_obj)
 
-    for attachment_path in get_attachment_paths(attachments_path):
+    for attachment_path in get_file_paths(attachments_folder_path):
         attach_file(message, attachment_path)
     
     """ 
