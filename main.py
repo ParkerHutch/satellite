@@ -3,9 +3,9 @@ import argparse
 import snapshot
 import email_handler
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-    description='Use a device to capture and send photos')
+        description='Use a device to capture and send photos')
     parser.add_argument('-v', '--verbose', 
                         help='show output when running the program', 
                         action='store_true')
@@ -25,6 +25,7 @@ def get_parser():
     parser.add_argument('-o', '--output', type=str, default=None, 
                         metavar='FILE',
                         help='output logs to the given file')
+    return parser
 
 
 def main():
