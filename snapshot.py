@@ -226,7 +226,7 @@ def capture(camera_device: str = 'all',
     if camera_device == 'all':
         # Take a picture on all connected cameras, excluding the PiCamera
         for device_name, cameras in find_devices().items():
-            if device_name is not 'picamera':
+            if device_name is not 'RPi Camera Module':
                 for _ in range(cameras):
                     take_fswebcam_picture(
                         device_name, 
