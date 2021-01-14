@@ -23,7 +23,8 @@ def attach_file(message, attachment_path):
         part = MIMEBase("application", "octet-stream")
         part.set_payload(attachment.read())
 
-    encoders.encode_base64(part) # Encode file in ASCII characters to send by email
+    # Encode file in ASCII characters to send by email
+    encoders.encode_base64(part)
 
     # Add header as key/value pair to attachment part
     part.add_header(
@@ -59,12 +60,14 @@ def send_email(attachments_path, verbose:bool = False):
         config['sender']['server'], config['sender']['port'], context=context
     ) as server:
         try:
-            server.login(config['sender']['username'], config['sender']['password'])
+            server.login(config['sender']['username'], 
+                            config['sender']['password'])
             if verbose:
                 print('Logged into the email server')
             try:
-                server.sendmail(
-                    config['sender']['username'], config['recipient']['username'], message.as_string())
+                server.sendmail(config['sender']['username'], 
+                                config['recipient']['username'], 
+                                message.as_string())
                 if verbose:
                     print("Sent the email")
             except smtplib.SMTPException as err:
