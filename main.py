@@ -1,7 +1,5 @@
 import time
-import sys
 import argparse
-from typing import List
 import snapshot
 import email_handler
 
