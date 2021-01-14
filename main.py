@@ -2,7 +2,7 @@ import argparse
 import time
 
 from email_handler import send_email
-from snapshot import find_devices, capture, stop
+from snapshot import capture, close_camera, find_devices
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -57,7 +57,7 @@ def main():
             if args.verbose:
                 print(f'Sending email: \t\t{int(email_end - email_start)} seconds')
         
-        stop()
+        close_camera()
 
 
 if __name__ == '__main__':

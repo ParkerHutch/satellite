@@ -242,7 +242,7 @@ def capture(camera_device: str = 'all', add_processing: bool = False,
     if not keep_output:
         os.remove(log_file_path)
 
-def stop():
+def close_camera():
     """Close the PiCamera if it was initialized."""
     if pi_camera is not None:
         pi_camera.close()
