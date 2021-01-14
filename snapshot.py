@@ -3,7 +3,7 @@ import subprocess
 from datetime import datetime
 from typing import Dict, List
 import os
-
+# TODO fix documentation
 """ 
     fswebcam arguments for image capture and processing
 """
@@ -102,9 +102,12 @@ def get_fswebcam_capture_args(device: str,
     if add_processing is True, to process the image after it is taken.  
 
     Args:
-        device (str): The name of the device to use to take a picture, usually
-        begins with /dev/video.
-        image_file_path (str): The path to the file to store the image in.
+        device (str): The name of the device to use to take a picture. An 
+        example value could be /dev/video0.
+        add_processing (bool): Whether to add image processing effects to photos 
+        after capture.
+        image_file_path (str): The path and filename of the file to store the
+        captured image in.
 
     Returns:
         List[str]: a list of arguments to use in conjuction with the fswebcam
@@ -132,11 +135,12 @@ def take_fswebcam_picture(device: str, add_processing: bool,
     output to the log file given by the log file path.
 
     Args:
-        device (str): The device to use to take a picture. Usually begins with
-        /dev/video.
-        log_file_path (str): The path to the file where command line output 
-        should be appended.
-        image_file_path (str): The output image's file path and name
+        device (str): The device to use to take a picture.
+        add_processing (bool): Whether to add image processing effects to photos 
+        after capture.
+        log_file_path (str): The path to the file to append logs to. 
+        image_file_path (str): The path and filename of the file to store the
+        captured image in.
     """
 
     log_file = open(log_file_path, 'a')
@@ -183,15 +187,22 @@ def capture(camera_device: str = 'all',
             log_file_path:str = './camera_logs.txt',
             images_directory: str = './images/'):
     """Take a picture using the given device, or on all connected devices, and
-    store the output in the given directory. This function also generates a 
+    stores the output in the given directory. This function also generates a 
     temporary output file, which will either be stored in the file given by
     log_file_path or deleted on function end if log_file_path is None.
 
     Args:
-        camera_device (str, optional): The device to use to take pictures. 
+        camera_device (str, optional): The device to use to take a photo. If 
+        'all' is specified, all detected devices will be used to capture photos. 
         Defaults to 'all'.
-        images_directory (str, optional): The relative filepath to store
-        output images in. Defaults to "./images/".
+        add_processing (bool, optional): Whether to add image processing effects
+        to photos after capture. Defaults to False.
+        verbose (bool, optional): Whether to show verbose output on stdout. 
+        Defaults to False.
+        log_file_path (str, optional): The path to the file to store logs in. 
+        Defaults to './camera_logs.txt'.
+        images_directory (str, optional): The path to the folder to store
+        captured images in. Defaults to './images/'.
     """
 
     prepare_directory(images_directory)
