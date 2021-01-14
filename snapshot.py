@@ -16,7 +16,8 @@ processing_args = [
     '--font', 'sans:20',
     '--no-shadow',
     '--no-subtitle', 
-    '--no-info']
+    '--no-info'
+]
 
 pi_camera = None
 try:
@@ -127,8 +128,7 @@ def get_fswebcam_capture_args(device: str,
     args.extend([image_file_path + '.jpg'])
     return args
 
-def take_fswebcam_picture(device: str, add_processing: bool, 
-                            log_file_path: str, 
+def take_fswebcam_picture(device: str, add_processing: bool, log_file_path: str, 
                             image_file_path: str):
     """Uses the 'fswebcam' command to take a picture using the given device, 
     storing the image in the given image file path and appending the terminal
@@ -181,10 +181,8 @@ def prepare_directory(images_directory_path: str):
     else:
         print('Error: images directory is actually a file.') # TODO raise exception
     
-def capture(camera_device: str = 'all', 
-            add_processing: bool = False,
-            verbose: bool = False,
-            log_file_path:str = './camera_logs.txt',
+def capture(camera_device: str = 'all', add_processing: bool = False,
+            verbose: bool = False, log_file_path:str = './camera_logs.txt',
             images_directory: str = './images/'):
     """Take a picture using the given device, or on all connected devices, and
     stores the output in the given directory. This function also generates a 
@@ -207,7 +205,7 @@ def capture(camera_device: str = 'all',
 
     prepare_directory(images_directory)
 
-    keep_output = (log_file_path is not None)
+    keep_output = log_file_path is not None
     log_file_path = log_file_path if log_file_path else './camera_logs.txt'
     
     # Clear the camera_log.txt file if it exists
@@ -226,16 +224,12 @@ def capture(camera_device: str = 'all',
             if device_name != 'RPi Camera Module':
                 for _ in range(cameras):
                     take_fswebcam_picture(
-                        device_name, 
-                        add_processing,
-                        log_file_path,
-                        images_directory + f'image{str(picture_num)}'
-                    )
+                        device_name, add_processing, log_file_path,
+                        images_directory + f'image{str(picture_num)}')
                     picture_num += 1
     elif camera_device.startswith('/dev/video'):
-        take_fswebcam_picture(camera_device,
-            add_processing,
-            log_file_path,
+        take_fswebcam_picture(
+            camera_device, add_processing, log_file_path, 
             images_directory + 'image')
     else:
         print(f'device {camera_device} is not supported')
@@ -248,7 +242,6 @@ def capture(camera_device: str = 'all',
         os.remove(log_file_path)
 
 def stop():
-    """Close the PiCamera if it was initialized.
-    """
+    """Close the PiCamera if it was initialized."""
     if pi_camera is not None:
         pi_camera.close()
