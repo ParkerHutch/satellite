@@ -1,18 +1,18 @@
 import os
 import subprocess
 from datetime import datetime
-from typing import Dict, Final, List
+from typing import Dict, List
 
 from picamera import PiCamera
 
 """ 
     fswebcam arguments for image capture and processing
 """
-CAPTURE_ARGS: Final[List[str]] = [
+CAPTURE_ARGS: List[str] = [
     '--resolution', '1280x720',
     '--delay', '1'
 ]
-PROCESSING_ARGS: Final[List[str]] = [
+PROCESSING_ARGS: List[str] = [
     '--banner-colour', '#FF0000', 
     '--font', 'sans:20',
     '--no-shadow',
