@@ -3,22 +3,32 @@ import argparse
 import snapshot
 import email_handler
 
-parser = argparse.ArgumentParser(description='Use a device to capture and send photos')
-parser.add_argument('-v', '--verbose', 
-                    help='show output when running the program', action='store_true')
-parser.add_argument('-p', '--process-images', 
-                    help='add image processing to captured images', action='store_true')
-parser.add_argument('-n', '--no-email', help="don't email the images after capture", action='store_true')
-parser.add_argument('-d', '--device',
-                    help="which device to use for capturing photos (specify 'all' to use all devices)", 
-                    type=str, default='all')
-parser.add_argument('-l', '--list-devices',
-                    help='list all detected devices and quit', action='store_true')
-parser.add_argument('-o', '--output', type=str, default=None, metavar='FILE',
+def get_parser():
+    parser = argparse.ArgumentParser(
+    description='Use a device to capture and send photos')
+    parser.add_argument('-v', '--verbose', 
+                        help='show output when running the program', 
+                        action='store_true')
+    parser.add_argument('-p', '--process-images', 
+                        help='add image processing to captured images', 
+                        action='store_true')
+    parser.add_argument('-n', '--no-email', 
+                        help="don't email the images after capture", 
+                        action='store_true')
+    parser.add_argument('-d', '--device',
+                        help="which device to use for capturing photos (specify\
+                            'all' to use all devices)", 
+                        type=str, default='all')
+    parser.add_argument('-l', '--list-devices',
+                        help='list all detected devices and quit', 
+                        action='store_true')
+    parser.add_argument('-o', '--output', type=str, default=None, 
+                        metavar='FILE',
                         help='output logs to the given file')
 
+
 def main():
-    args = parser.parse_args()
+    args = get_parser().parse_args()
     
     if args.list_devices:
         print('Device: Input Count')
@@ -45,6 +55,7 @@ def main():
                 print(f'Sending email: \t\t{int(email_end - email_start)} seconds')
         
         snapshot.stop()
+
 
 if __name__ == '__main__':
     main()
