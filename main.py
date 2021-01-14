@@ -33,7 +33,7 @@ def main():
         snapshot.capture(camera_device=args.device, 
                             add_processing=args.process_images, 
                             verbose=args.verbose,
-                            log_file_path=args.keep_output
+                            log_file_path=args.output
         )
         capture_end = time.time()
         if args.verbose:
