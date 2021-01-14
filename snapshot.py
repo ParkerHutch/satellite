@@ -5,9 +5,7 @@ from typing import Dict, List
 
 from picamera import PiCamera
 
-""" 
-    fswebcam arguments for image capture and processing
-"""
+# fswebcam arguments for image capture and processing
 CAPTURE_ARGS: List[str] = [
     '--resolution', '1280x720',
     '--delay', '1'
@@ -20,6 +18,7 @@ PROCESSING_ARGS: List[str] = [
     '--no-info'
 ]
 
+# Attempt to connect to the Raspberry Pi Camera Module
 pi_camera = None
 try:
     pi_camera = PiCamera()
