@@ -84,7 +84,7 @@ def send_email(attachments_folder_path: str,
     """
     with open(html_message_path, 'r') as template_file:
         template = Template(template_file.read())
-    html = template.render(test_text='Hey there')
+    html = template.render(diagnostics={'Test':2})
 
     html_obj = MIMEText(html, "html")
 
