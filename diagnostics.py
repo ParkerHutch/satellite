@@ -37,9 +37,11 @@ def get_memory_used_percent() -> float:
     used_percent = (float(mem.used) / mem.available) * 100
     return used_percent
 
+
 def get_memory_available() -> int:
     """Return the system's available memory in bytes."""
     return psutil.virtual_memory().available
+
 
 def get_system() -> str:
     """Return the platform's system (Linux, Windows, etc.) if it can be found, 
@@ -59,7 +61,13 @@ def get_processor() -> str:
     """
     return platform.processor() if platform.processor() else 'Unknown'
 
+
 def get_boot_time() -> str:
+    """Get the system's last boot time as a human readable string.
+
+    Returns:
+        str: the system's last boot time, formatted as mm/dd/yyy HR:MM AM/PM
+    """
     boot_time_epoch = psutil.boot_time()
     return time.strftime('%m/%d/%Y %I:%M %p', time.localtime(boot_time_epoch))
 
@@ -76,6 +84,7 @@ def get_temperature() -> float:
     temps = psutil.sensors_temperatures(fahrenheit=True)
     first_temp = next(iter(temps.values()))[0].current
     return first_temp
+
 
 def get_formatted_diagnostics() -> Dict[str, any]:
     """Get computer diagnostics as a dictionary with attributes as keys and 
