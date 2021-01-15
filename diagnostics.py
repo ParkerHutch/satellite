@@ -12,7 +12,7 @@ def get_wifi_signal_strength():
                                         stderr=subprocess.DEVNULL)
     strength_fraction = output.split('Link Quality=')[1].split()[0]
     numerator, denominator = map(float, strength_fraction.split('/', 1))
-    return numerator / denominator
+    return (numerator / denominator) * 100
 
 
 def get_memory_info():
@@ -27,13 +27,16 @@ def get_memory_info():
 def get_diagnostics():
     return {
         'CPU Usage': f'{get_cpu_usage_percent()}%',
-        'Wifi': get_wifi_signal_strength(),
+        'Wifi Strength': get_wifi_signal_strength(),
         'Memory Used:': f'{get_memory_info()["Used Percentage"]}%',
         'Memory Available:': f'{get_memory_info()["Memory Available"]}'
     }
 
     
 if __name__ == '__main__':
+    print('Diagnostics')
+    print(get_diagnostics())
+    print()
     print('Memory:', get_memory_info())
     print('Wifi:', get_wifi_signal_strength())
     print('CPU Usage:', get_cpu_usage_percent())
