@@ -24,6 +24,14 @@ def get_memory_info():
         'Memory Available': humanize.naturalsize(mem.available)
     }
 
+def get_diagnostics():
+    return {
+        'CPU Usage': f'{get_cpu_usage_percent()}%',
+        'Wifi': get_wifi_signal_strength(),
+        'Memory Used:': f'{get_memory_info()["Used Percentage"]}%',
+        'Memory Available:': f'{get_memory_info()["Memory Available"]}'
+    }
+
     
 if __name__ == '__main__':
     print('Memory:', get_memory_info())

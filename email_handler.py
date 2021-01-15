@@ -9,6 +9,8 @@ from os import path, walk
 from typing import List
 from jinja2 import Template
 
+import diagnostics
+
 
 def _get_file_paths(folder_path: str) -> List[str]:
     """Get the paths to all files in the folder given by the path 
@@ -84,7 +86,7 @@ def send_email(attachments_folder_path: str,
     """
     with open(html_message_path, 'r') as template_file:
         template = Template(template_file.read())
-    html = template.render(diagnostics={'Test':2})
+    html = template.render(diagnostics=diagnostics.get_diagnostics())
 
     html_obj = MIMEText(html, "html")
 
