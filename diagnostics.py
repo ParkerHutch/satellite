@@ -32,7 +32,7 @@ def get_system():
 
 
 def get_processor():
-    return platform.processor()
+    return platform.processor() if platform.processor() else 'Unknown'
 
 
 def get_diagnostics(): # TODO rename formatted diagnostics
