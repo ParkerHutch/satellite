@@ -61,7 +61,7 @@ def get_processor() -> str:
 
 def get_boot_time() -> str:
     boot_time_epoch = psutil.boot_time()
-    return time.strftime('%m/%d/%Y %H:%M %p', time.localtime(boot_time_epoch))
+    return time.strftime('%m/%d/%Y %I:%M %p', time.localtime(boot_time_epoch))
 
 
 def get_temperature() -> float:
