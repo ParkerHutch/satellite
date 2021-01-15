@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os import path, walk
 from typing import List
+from jinja2 import Template
 
 
 def _get_file_paths(folder_path: str) -> List[str]:
@@ -81,7 +82,9 @@ def send_email(attachments_folder_path: str,
     """
         Create the HTML part of the message
     """
-    html = open(html_message_path, 'r').read()
+    with open(html_message_path, 'r') as template_file:
+        template = Template(template_file.read())
+    html = template.render(test_text='Hey there')
 
     html_obj = MIMEText(html, "html")
 
