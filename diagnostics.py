@@ -1,11 +1,13 @@
+from os import system
 import subprocess
 from typing import Dict
 import psutil
 import humanize
+import platform
 
-# TODO make diagnostics object containing everything below
 def get_cpu_usage_percent():
     return psutil.cpu_percent()
+
 
 def get_wifi_signal_strength():
     output = subprocess.check_output(['iwconfig'], text=True, 
@@ -24,10 +26,21 @@ def get_memory_info():
         'Memory Available': humanize.naturalsize(mem.available)
     }
 
-def get_diagnostics():
+
+def get_system():
+    return platform.system() if platform.system() else 'Unknown'
+
+
+def get_processor():
+    return platform.processor()
+
+
+def get_diagnostics(): # TODO rename formatted diagnostics
     return {
         'CPU Usage': f'{get_cpu_usage_percent():.1f}%',
         'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
         'Memory Used': f'{get_memory_info()["Used Percentage"]:.1f}%',
-        'Memory Available': f'{get_memory_info()["Memory Available"]}'
+        'Memory Available': f'{get_memory_info()["Memory Available"]}',
+        'System': get_system(),
+        'Processor': get_processor()
     }
