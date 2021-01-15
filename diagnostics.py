@@ -26,9 +26,9 @@ def get_memory_info():
 
 def get_diagnostics():
     return {
-        'CPU Usage': f'{get_cpu_usage_percent():.2f}%',
-        'Wifi Strength': f'{get_wifi_signal_strength():.2f}%',
-        'Memory Used:': f'{get_memory_info()["Used Percentage"]:.2f}%',
+        'CPU Usage': f'{get_cpu_usage_percent():.1f}%',
+        'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
+        'Memory Used:': f'{get_memory_info()["Used Percentage"]:.1f}%',
         'Memory Available:': f'{get_memory_info()["Memory Available"]}'
     }
 
