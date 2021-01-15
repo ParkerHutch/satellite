@@ -43,7 +43,7 @@ def get_diagnostics(): # TODO rename formatted diagnostics
     return {
         'CPU Usage': f'{get_cpu_usage_percent():.1f}%',
         'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
-        'Temperature:': f'{get_temperature():.1f}\u00b0F'
+        'Temperature:': f'{get_temperature():.1f}\u00b0F',
         'Memory Used': f'{get_memory_info()["Used Percentage"]:.1f}%',
         'Memory Available': f'{get_memory_info()["Memory Available"]}',
         'System': get_system(),
