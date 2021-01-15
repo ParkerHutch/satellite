@@ -48,7 +48,7 @@ def main():
             for device, cameras in snapshot.find_devices().items():
                 print(f'{device}: {cameras}')
         elif args.diagnostics:
-            for key, value in diagnostics.get_diagnostics().items():
+            for key, value in diagnostics.get_formatted_diagnostics().items():
                 print(f'{key}: {value}')
     else:
         capture_start = time.time()
