@@ -18,7 +18,7 @@ def get_wifi_signal_strength():
 def get_memory_info():
     mem = psutil.virtual_memory()
 
-    used_percent = float(mem.used) / mem.available
+    used_percent = (float(mem.used) / mem.available) * 100
     return {
         'Used Percentage': used_percent, 
         'Memory Available': humanize.naturalsize(mem.available)
