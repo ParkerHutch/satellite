@@ -2,10 +2,19 @@
   <body>
     <p>
       <b>This email was sent from a Python script.</b><br>
-      {% for item, value in diagnostics.items() %}
-        <li>{{item}}:{{value}}</li>
-      {% endfor %}
-      <b>{{test_text}}</b>
+      
+      <table border="1px solid black">
+        <tr>
+          <th colspan="2">Diagnostics</th>
+        </tr>
+        {% for item, value in diagnostics.items() %}
+          <tr>
+            <td>{{item}}</td>
+            <td>{{value}}</td>
+          </tr>
+        {% endfor %}
+        
+      </table>
     </p>
   </body>
 </html>
