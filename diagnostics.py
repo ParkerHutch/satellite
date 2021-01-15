@@ -4,6 +4,8 @@ from typing import Dict
 import psutil
 import humanize
 import platform
+import time
+
 
 def get_cpu_usage_percent() -> float:
     """Get the system's CPU utilization percentage."""
@@ -57,6 +59,11 @@ def get_processor() -> str:
     """
     return platform.processor() if platform.processor() else 'Unknown'
 
+def get_boot_time() -> str:
+    boot_time_epoch = psutil.boot_time()
+    return time.strftime('%m/%d/%Y %H:%M %p', time.localtime(boot_time_epoch))
+
+
 def get_temperature() -> float:
     """Get the computer hardware's temperature in degrees Farenheit. If multiple
     temperature sensors are present, this returns the first sensor's 
@@ -86,5 +93,6 @@ def get_formatted_diagnostics() -> Dict[str, any]:
         'Memory Used': f'{get_memory_used_percent():.1f}%',
         'Memory Available': f'{humanize.naturalsize(get_memory_available())}',
         'System': get_system(),
-        'Processor': get_processor()
+        'Processor': get_processor(),
+        'Boot Time': get_boot_time()
     }
