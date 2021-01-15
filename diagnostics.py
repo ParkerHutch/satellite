@@ -39,10 +39,6 @@ def get_memory_available() -> int:
     """Return the system's available memory in bytes."""
     return psutil.virtual_memory().available
 
-def get_memory_available_human() -> str:
-    """Return the system's available memory in a human readable form."""
-    return humanize.naturalsize(get_memory_available())
-
 def get_system() -> str:
     """Return the platform's system (Linux, Windows, etc.) if it can be found, 
     otherwise 'Unknown'
@@ -88,7 +84,7 @@ def get_formatted_diagnostics() -> Dict[str, any]:
         'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
         'Temperature:': f'{get_temperature():.1f}\u00b0F',
         'Memory Used': f'{get_memory_used_percent():.1f}%',
-        'Memory Available': f'{get_memory_available()}',
+        'Memory Available': f'{humanize.naturalsize(get_memory_available())}',
         'System': get_system(),
         'Processor': get_processor()
     }
