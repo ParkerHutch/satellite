@@ -3,7 +3,8 @@ from typing import Dict
 
 
 def get_wifi_signal_strength():
-    output = subprocess.check_output(['iwconfig'], text=True)
+    output = subprocess.check_output(['iwconfig'], text=True, 
+                                        stderr=subprocess.DEVNULL)
     strength_fraction = output.split('Link Quality=')[1].split()[0]
     numerator, denominator = map(float, strength_fraction.split('/', 1))
     return numerator / denominator
