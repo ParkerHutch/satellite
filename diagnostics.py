@@ -35,8 +35,5 @@ def get_diagnostics():
     
 if __name__ == '__main__':
     print('Diagnostics')
-    print(get_diagnostics())
-    print()
-    print('Memory:', get_memory_info())
-    print('Wifi:', get_wifi_signal_strength())
-    print('CPU Usage:', get_cpu_usage_percent())
+    for key, value in get_diagnostics().items():
+        print(key, value)
