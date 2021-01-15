@@ -1,6 +1,11 @@
 import subprocess
 from typing import Dict
+import psutil
+import humanize
 
+# TODO make diagnostics object containing everything below
+def get_cpu_usage_percent():
+    return psutil.cpu_percent()
 
 def get_wifi_signal_strength():
     output = subprocess.check_output(['iwconfig'], text=True, 
@@ -10,15 +15,17 @@ def get_wifi_signal_strength():
     return numerator / denominator
 
 
-def get_memory_info(units_arg:str = '--mega') -> Dict[str, str]:
-    output = subprocess.check_output(['free', '-w', '--mega'], text=True)
-    # TODO can i use headers, numbers = output.split() ? 
-    column_headers = output.split('Mem:')[0].split()[:7]
-    numbers = list(map(int, 
-                        output.split('Mem:')[1].split()[:len(column_headers)]))
-    return dict(zip(column_headers, numbers))
+def get_memory_info():
+    mem = psutil.virtual_memory()
 
+    used_percent = float(mem.used) / mem.available
+    return {
+        'Used Percentage': used_percent, 
+        'Memory Available': humanize.naturalsize(mem.available)
+    }
 
+    
 if __name__ == '__main__':
-    print(get_memory_info())
-    print(get_wifi_signal_strength())
+    print('Memory:', get_memory_info())
+    print('Wifi:', get_wifi_signal_strength())
+    print('CPU Usage:', get_cpu_usage_percent())
