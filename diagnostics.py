@@ -28,12 +28,6 @@ def get_diagnostics():
     return {
         'CPU Usage': f'{get_cpu_usage_percent():.1f}%',
         'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
-        'Memory Used:': f'{get_memory_info()["Used Percentage"]:.1f}%',
-        'Memory Available:': f'{get_memory_info()["Memory Available"]}'
+        'Memory Used': f'{get_memory_info()["Used Percentage"]:.1f}%',
+        'Memory Available': f'{get_memory_info()["Memory Available"]}'
     }
-
-    
-if __name__ == '__main__':
-    print('Diagnostics')
-    for key, value in get_diagnostics().items():
-        print(key, value)
