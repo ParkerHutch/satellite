@@ -3,7 +3,7 @@ import time
 
 from email_handler import send_email
 import snapshot
-
+import diagnostics
 
 def get_parser() -> argparse.ArgumentParser:
     """Build an ArgumentParser to handle various command line arguments.
@@ -30,6 +30,9 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument('-l', '--list-devices',
                         help='list all detected devices and quit', 
                         action='store_true')
+    parser.add_argument('--diagnostics',
+                        help='list system diagnostics and quit', 
+                        action='store_true')
     parser.add_argument('-o', '--output', type=str, default=None, 
                         metavar='FILE',
                         help='output logs to the given file')
@@ -39,11 +42,14 @@ def get_parser() -> argparse.ArgumentParser:
 def main():
     args = get_parser().parse_args()
     
-    if args.list_devices:
-        print('Device: Input Count')
-        for device, cameras in snapshot.find_devices().items():
-            print(f'{device}: {cameras}')
-        
+    if args.list_devices or args.diagnostics:
+        if args.list_devices:
+            print('Device: Input Count')
+            for device, cameras in snapshot.find_devices().items():
+                print(f'{device}: {cameras}')
+        elif args.diagnostics:
+            for key, value in diagnostics.get_formatted_diagnostics().items():
+                print(f'{key}: {value}')
     else:
         capture_start = time.time()
         snapshot.capture(camera_device=args.device, 
