@@ -55,8 +55,8 @@ def _attach_file(message: MIMEMultipart, attachment_path: str):
     message.attach(part) # attach attachment
 
 def send_email(attachments_folder_path: str, 
-                html_message_path: str = './email-message.html', 
-                config_path: str = './config.json',
+                html_message_path: str = './static/email-message.html', 
+                config_path: str = './static/config.json',
                 verbose:bool = False):
     """Use the config file to send an email containing the given message and
     attachments to a recipient, also defined in the config file.
@@ -65,10 +65,10 @@ def send_email(attachments_folder_path: str,
         attachments_folder_path (str): the path to the folder containing files
         to be attached
         html_message_path (str, optional): the path to the message's HTML 
-        content. Defaults to './email-message.html'.
+        content. Defaults to './static/email-message.html'.
         config_path (str, optional): the path to the config file to draw sender,
         receiver, and email server information from. Defaults to 
-        './config.json'.
+        './static/config.json'.
         verbose (bool, optional): whether to output information to stdout while
         emailing the message. Defaults to False.
     """
@@ -117,7 +117,7 @@ def send_email(attachments_folder_path: str,
                 print('An error occurred while sending the email: \n', err)
         except smtplib.SMTPException as err:
             print("Could not log into the email server. Please check \
-                that the 'sender' values are correct in config.json.")
+                that the 'sender' values are correct in the config file.")
             print('Error:\n', err)
         finally:
             server.quit()
