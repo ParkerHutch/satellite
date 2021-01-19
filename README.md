@@ -4,7 +4,7 @@ to a specified email address.
 
 ## Usage
 1. Modify [config.json](./static/config.json) in the static folder, specifying email account and server information.
-2. Run main.py, with optional command line arguments if desired.
+2. Run [main.py](./main.py), with optional command line arguments if desired.
 
 ## Optional Arguments
 Usage: main.py [-h] [-v] [-p] [-n] [-d DEVICE] [-l] [--diagnostics] [-o FILE]
