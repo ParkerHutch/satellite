@@ -3,7 +3,7 @@ A satellite-control program that reports system diagnostics and camera feeds
 to a specified email address.
 
 ## Usage
-1. Modify [config.json](./static/config.json) in the static folder, specifying email account and server information.
+1. Modify [config.json](./static/config.json) in the [static folder](./static), specifying email account and server information.
 2. Run [main.py](./main.py), with optional command line arguments if desired.
 
 ## Optional Arguments
