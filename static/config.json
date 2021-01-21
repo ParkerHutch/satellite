@@ -1,4 +1,5 @@
 {
+    "satellite": "Sentinel",
     "sender": {
         "username": "sender@email.com",
         "password": "password",

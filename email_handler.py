@@ -77,7 +77,7 @@ def send_email(attachments_folder_path: str,
         config = json.load(config_file)
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "Satellite Message"
+    message["Subject"] = f'Satellite {config["satellite"]} Message'
     message["From"] = config['sender']['username']
     message["To"] = config['recipient']['username']
 
