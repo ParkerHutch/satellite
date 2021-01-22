@@ -8,8 +8,9 @@ python3 main.py -p
 ```
 
 ### Email Received
-| Diagnostics       |                       |
-|---|---|
+#### Diagnostics
+|        |                       |
+|-------------------|-----------------------|
 | CPU Usage         |	12.0%               |
 | Wifi Strength	    |   95.7%               |
 | Temperature       |	119.0°F             |
