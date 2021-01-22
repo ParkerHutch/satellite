@@ -2,6 +2,28 @@
 A satellite-control program that reports system diagnostics and camera feeds
 to a specified email address.
 
+### Example
+```
+python3 main.py -p
+```
+
+### Email Received
+| Diagnostics       |                       |
+|---|---|
+| CPU Usage         |	12.0%               |
+| Wifi Strength	    |   95.7%               |
+| Temperature       |	119.0°F             |
+| Memory Used	    |   6.4%                |
+| Memory Available	|   806.2 MB            |
+| System	        |   Linux               |
+| Processor	        |   Unknown             |
+|Boot Time	        |   01/21/2021 07:10 PM |
+
+#### Attachments
+![](./demo/image1.jpg)
+![](./demo/image2.jpg)
+
+
 ## Usage
 1. Modify [config.json](./static/config.json) in the [static folder](./static), specifying email account and server information.
 2. Run [main.py](./main.py), with optional command line arguments if desired.
