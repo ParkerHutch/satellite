@@ -45,7 +45,7 @@ Usage: main.py [-h] [-v] [-p] [-n] [-d DEVICE] [-l] [--diagnostics] [-o FILE]
 
 ## Requirements
 - [fswebcam package](http://manpages.ubuntu.com/manpages/bionic/man1/fswebcam.1.html).
-- Python package requirements are listed in requirements.txt.
+- Python package requirements are listed in [requirements.txt](./requirements.txt).
 
 
 ### Resources Used
