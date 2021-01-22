@@ -1,8 +1,8 @@
 import argparse
 import time
 
-from email_handler import send_email
-import snapshot
+from communications import send_email
+import photography
 import diagnostics
 
 def get_parser() -> argparse.ArgumentParser:
@@ -45,14 +45,14 @@ def main():
     if args.list_devices or args.diagnostics:
         if args.list_devices:
             print('Device: Input Count')
-            for device, cameras in snapshot.find_devices().items():
+            for device, cameras in photography.find_devices().items():
                 print(f'{device}: {cameras}')
         elif args.diagnostics:
             for key, value in diagnostics.get_formatted_diagnostics().items():
                 print(f'{key}: {value}')
     else:
         capture_start = time.time()
-        snapshot.capture(camera_device=args.device, 
+        photography.capture(camera_device=args.device, 
                             add_processing=args.process_images, 
                             verbose=args.verbose,
                             log_file_path=args.output
@@ -71,7 +71,7 @@ def main():
                 print(f'Sending email: \t\t{int(email_end - email_start)} \
                         seconds')
         
-        snapshot.close_camera()
+        photography.close_camera()
 
 
 if __name__ == '__main__':
