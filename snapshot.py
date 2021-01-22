@@ -23,7 +23,6 @@ try:
     pi_camera = PiCamera()
 except:
     pi_camera = None
-    pass
 
 def find_devices(search_range: int = 10) -> Dict[str, int]:
     """Return a dictionary of device names as keys and the corresponding 
