@@ -1,9 +1,10 @@
 import argparse
 import time
 
-from communications import send_email
-import photography
+import communications
 import diagnostics
+import photography
+
 
 def get_parser() -> argparse.ArgumentParser:
     """Build an ArgumentParser to handle various command line arguments.
@@ -65,7 +66,7 @@ def main():
 
         if not args.no_email:
             email_start = time.time()
-            send_email('images/', verbose=args.verbose)
+            communications.send_email('images/', verbose=args.verbose)
             email_end = time.time()
             if args.verbose:
                 print(f'Sending email: \t\t{int(email_end - email_start)} \
