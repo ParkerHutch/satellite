@@ -2,12 +2,12 @@
 A satellite-control program that reports system diagnostics and camera feeds
 to a specified email address.
 
-### Example
+### Demo
 ```
 python3 main.py -p
 ```
 
-### Email Received
+### Email Contents
 #### Diagnostics
 |                   |                       |
 |-------------------|-----------------------|
@@ -26,7 +26,8 @@ python3 main.py -p
 
 
 ## Usage
-1. Modify [config.json](./static/config.json) in the [static folder](./static), specifying email account and server information.
+1. Modify [config.json](./static/config.json) in the [static folder](./static), 
+specifying email account and server information.
 2. Run [main.py](./main.py), with optional command line arguments if desired.
 
 ## Optional Arguments
@@ -48,7 +49,7 @@ Usage: main.py [-h] [-v] [-p] [-n] [-d DEVICE] [-l] [--diagnostics] [-o FILE]
 - Python package requirements are listed in [requirements.txt](./requirements.txt).
 
 
-### Resources Used
+### References
 - [Email Setup](https://realpython.com/python-send-email/)
 - [fswebcam on Raspberry Pi](https://www.raspberrypi.org/documentation/usage/webcams/)
 - [Raspberry Pi Camera Module](https://projects.raspberrypi.org/en/projects/getting-started-with-picamera)
