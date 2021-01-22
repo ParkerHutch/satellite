@@ -98,7 +98,7 @@ def get_formatted_diagnostics() -> Dict[str, any]:
     return {
         'CPU Usage': f'{get_cpu_usage_percent():.1f}%',
         'Wifi Strength': f'{get_wifi_signal_strength():.1f}%',
-        'Temperature:': f'{get_temperature():.1f}\u00b0F',
+        'Temperature': f'{get_temperature():.1f}\u00b0F',
         'Memory Used': f'{get_memory_used_percent():.1f}%',
         'Memory Available': f'{humanize.naturalsize(get_memory_available())}',
         'System': get_system(),
