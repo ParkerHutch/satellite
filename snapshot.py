@@ -19,10 +19,10 @@ PROCESSING_ARGS: List[str] = [
 ]
 
 # Attempt to connect to the Raspberry Pi Camera Module
-pi_camera = None
 try:
     pi_camera = PiCamera()
 except:
+    pi_camera = None
     pass
 
 def find_devices(search_range: int = 10) -> Dict[str, int]:

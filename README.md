@@ -9,7 +9,7 @@ python3 main.py -p
 
 ### Email Received
 #### Diagnostics
-|        |                       |
+|                   |                       |
 |-------------------|-----------------------|
 | CPU Usage         |	12.0%               |
 | Wifi Strength	    |   95.7%               |
