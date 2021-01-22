@@ -1,6 +1,7 @@
 # Satellite :satellite:
 A satellite-control program that reports system diagnostics and camera feeds
 to a specified email address.
+---
 
 ### Demo
 ```
@@ -45,7 +46,7 @@ Usage: main.py [-h] [-v] [-p] [-n] [-d DEVICE] [-l] [--diagnostics] [-o FILE]
 | -o FILE --output FILE     | output logs to the given file             |
 
 ## Requirements
-- [fswebcam package](http://manpages.ubuntu.com/manpages/bionic/man1/fswebcam.1.html).
+- [fswebcam package](http://manpages.ubuntu.com/manpages/bionic/man1/fswebcam.1.html)
 - Python package requirements are listed in [requirements.txt](./requirements.txt).
 
 
