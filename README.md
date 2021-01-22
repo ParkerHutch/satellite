@@ -18,7 +18,7 @@ python3 main.py -p
 | Memory Available	|   806.2 MB            |
 | System	        |   Linux               |
 | Processor	        |   Unknown             |
-|Boot Time	        |   01/21/2021 07:10 PM |
+| Boot Time	        |   01/21/2021 07:10 PM |
 
 #### Attachments
 ![](./demo/image1.jpg)
