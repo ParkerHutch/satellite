@@ -1,4 +1,4 @@
-# Satellite :satellite:
+# Satellite :artificial_satellite:
 A satellite-control program that reports system diagnostics and camera feeds
 to a specified email address.
 ---
